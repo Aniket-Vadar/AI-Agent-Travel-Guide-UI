@@ -31,6 +31,24 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Option 1: Using Deployment Scripts
+```bash
+# Via npm script
+npm run deploy
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Or using the PowerShell script (Windows)
+.\deploy.ps1
+
+# Or bash script (Linux/macOS)
+./deploy.sh
+```
+
+### Option 2: Import from Git into Vercel Dashboard
+1. Go to [Vercel Dashboard](https://vercel.com/new).
+2. Import the `AI-Agent-Travel-Guide-UI` repository.
+3. Under **Environment Variables**, add:
+   - `BACKEND_URL`: URL of your deployed FastAPI backend (e.g., `https://your-backend.railway.app`)
+4. Click **Deploy**.
+
+### Option 3: GitHub Actions CI/CD
+A GitHub workflow is provided at `.github/workflows/deploy.yml`. Add `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` to your GitHub repo secrets to deploy automatically on push to `main`.
