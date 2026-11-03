@@ -1,0 +1,371 @@
+.section {
+  padding: 100px 24px 120px;
+  position: relative;
+  background: var(--bg-cream);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sunset-orange);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.eyebrow::before,
+.eyebrow::after {
+  content: '';
+  width: 20px;
+  height: 2px;
+  background: var(--sunset-orange);
+  border-radius: 2px;
+}
+
+.title {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  color: var(--text-dark);
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 0.98rem;
+  color: var(--text-body);
+  line-height: 1.6;
+}
+
+/* 2-Card Layout */
+.grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 28px;
+  align-items: stretch;
+}
+
+.formCard, .previewCard {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.cardHeaderRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.stepBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: var(--bg-dark);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 5px;
+}
+
+.cardHeaderTitle {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.15rem;
+  color: var(--text-dark);
+  flex: 1;
+}
+
+.headerCompass {
+  color: var(--text-muted);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.fieldBox {
+  background: var(--bg-white);
+  border: 1px solid var(--border-medium);
+  border-radius: 14px;
+  padding: 10px 14px;
+  text-align: left;
+  transition: border-color 0.2s ease;
+}
+
+.fieldBox:focus-within {
+  border-color: var(--sunset-orange);
+  box-shadow: 0 0 0 3px rgba(232, 101, 43, 0.08);
+}
+
+.fieldLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.inputWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fieldIcon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  outline: none;
+}
+
+/* Duration */
+.durationBlock {
+  background: var(--bg-warm);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+
+.durationHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.durationBadge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--sunset-orange);
+  background: rgba(232, 101, 43, 0.08);
+  padding: 3px 10px;
+  border-radius: 9999px;
+}
+
+.sliderWrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sliderMin, .sliderMax {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.rangeInput {
+  flex: 1;
+  accent-color: var(--sunset-orange);
+  cursor: pointer;
+}
+
+/* Tempo */
+.tempoBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tempoButtons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.tempoBtn {
+  padding: 10px 8px;
+  border-radius: 9999px;
+  border: 1px solid var(--border-medium);
+  background: var(--bg-white);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-body);
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.tempoBtn:hover {
+  border-color: var(--text-dark);
+}
+
+.tempoBtnActive {
+  background: var(--bg-dark);
+  color: white;
+  border-color: var(--bg-dark);
+}
+
+/* Themes */
+.themesBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.themePills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.themePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 9999px;
+  background: var(--bg-white);
+  border: 1px solid var(--border-medium);
+  color: var(--text-body);
+  transition: all 0.2s ease;
+}
+
+.themePill:hover {
+  border-color: var(--text-dark);
+}
+
+.themePillActive {
+  background: var(--bg-dark);
+  color: white;
+  border-color: var(--bg-dark);
+}
+
+/* Blueprint Preview Card */
+.blueprintInnerCard {
+  background: var(--bg-warm);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.blueprintBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--sunset-orange);
+  margin-bottom: 8px;
+  display: block;
+  text-transform: uppercase;
+}
+
+.blueprintTitle {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.35rem;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.blueprintDesc {
+  font-size: 0.88rem;
+  color: var(--text-body);
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.checkList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.checkItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.86rem;
+  color: var(--text-body);
+  line-height: 1.45;
+}
+
+.checkCircle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--forest-green);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.blueprintFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-light);
+}
+
+.pagesCount {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

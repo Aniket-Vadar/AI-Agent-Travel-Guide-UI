@@ -1,0 +1,67 @@
+/* Loading Overlay */
+.loadingOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(250, 247, 242, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.loadingInner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.loadingSpinner {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px dashed rgba(232, 101, 43, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: spin 10s linear infinite;
+}
+
+.loadingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(232, 101, 43, 0.08);
+  color: var(--sunset-orange);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.loadingTitle {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 2rem;
+  color: var(--text-dark);
+}
+
+.loadingDesc {
+  font-size: 0.95rem;
+  color: var(--text-body);
+  max-width: 400px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

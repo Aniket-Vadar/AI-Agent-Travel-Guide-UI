@@ -1,0 +1,216 @@
+.playerBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9995;
+  background: rgba(26, 22, 20, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  padding: 12px 24px;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+/* Left info */
+.leftInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 220px;
+}
+
+.audioIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(232, 101, 43, 0.2);
+  color: var(--sunset-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.barCity {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.barLabel {
+  font-size: 0.72rem;
+  color: #A89F91;
+}
+
+/* Center Controls */
+.centerControls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  max-width: 600px;
+}
+
+.playBtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--sunset-orange);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.playBtn:hover {
+  background: var(--sunset-orange-hover);
+  transform: scale(1.08);
+}
+
+/* Equalizer */
+.equalizer {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 20px;
+}
+
+.eqBar {
+  width: 2.5px;
+  height: 6px;
+  background: var(--sunset-orange);
+  border-radius: 1px;
+  opacity: 0.5;
+  transition: height 0.2s ease;
+}
+
+.eqBarActive {
+  opacity: 1;
+  animation: waveBar 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes waveBar {
+  0% { height: 4px; }
+  100% { height: 16px; }
+}
+
+/* Scrubber */
+.scrubber {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: var(--sunset-orange);
+  border-radius: 999px;
+  transition: width 0.1s linear;
+}
+
+.timeDisplay {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.76rem;
+  color: #A89F91;
+  flex-shrink: 0;
+}
+
+/* Right Actions */
+.rightActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.speedBtn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #A89F91;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  transition: all 0.2s ease;
+}
+
+.speedBtn:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.volumeBtn {
+  color: #A89F91;
+  background: transparent;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.volumeBtn:hover {
+  color: #FFFFFF;
+}
+
+.closeBtn {
+  color: #A89F91;
+  background: transparent;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+  .inner {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .centerControls {
+    order: 3;
+    max-width: 100%;
+    width: 100%;
+  }
+}
