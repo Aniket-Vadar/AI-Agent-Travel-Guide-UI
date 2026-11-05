@@ -351,85 +351,22 @@ export const api = {
   },
 
   async generatePDF(city: string, country: string, days: number, preferences: string): Promise<Blob> {
-    try {
-      const res = await fetch(`${API_BASE}/guide/pdf`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ city, country, days, preferences }),
-      });
-      if (res.ok) {
-        return await res.blob();
-      }
-    } catch {
-      // Backend fallback handled below
+    const res = await fetch(`${API_BASE}/guide/pdf`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ city, country, days, preferences }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || err.message || `Failed to generate PDF guide (Status: ${res.status})`);
     }
 
-    // Client-side generated rich itinerary text blob if PDF backend is busy
-    const travelDossierContent = `
-========================================================================
-             WAYFARER AI TRAVEL DOSSIER & ITINERARY
-========================================================================
-DESTINATION : ${city.toUpperCase()}, ${country ? country.toUpperCase() : 'WORLD'}
-DURATION    : ${days} DAYS
-PREFERENCES : ${preferences}
-STATUS      : OFFICIALLY CURATED BY WAYFARER NEURAL ENGINE
-------------------------------------------------------------------------
-
-TABLE OF CONTENTS:
-1. Executive Destination Summary & Best Season
-2. Day-by-Day Visual Itinerary
-3. Curated Gastronomy & Must-Try Specialties
-4. Logistics, Transit Tips & Local Etiquette
-5. Essential Packing Checklist
-
-------------------------------------------------------------------------
-1. EXECUTIVE DESTINATION SUMMARY
-------------------------------------------------------------------------
-Welcome to ${city}! Your customized ${days}-day expedition balances
-world-renowned landmarks with secluded, authentic neighborhood treasures.
-
-Key Focus:
-- Pace: Balanced exploration with ample time to absorb local ambiance.
-- Interests: ${preferences}
-- Best Timing: Early morning starts (07:30 - 08:30 AM) to experience 
-  cultural monuments before peak foot traffic.
-
-------------------------------------------------------------------------
-2. DAY-BY-DAY ROUTE & HIGHLIGHTS
-------------------------------------------------------------------------
-${Array.from({ length: days }).map((_, i) => `
-DAY ${i + 1}:
-  • Morning (08:30 AM)   : Arrival & Historic Landmark Exploration
-    - Walk through the historic core of ${city}.
-    - Local Tip: Wear comfortable walking shoes; historic cobblestones abound.
-  • Midday (12:30 PM)    : Authentic Culinary Grazing
-    - Lunch at local market stalls or traditional heritage bistro.
-  • Afternoon (03:00 PM) : Cultural Immersion & Artisan Quarters
-    - Visit primary museum, temple, or scenic waterfront promenade.
-  • Evening (07:30 PM)   : Golden Hour Panoramic Sunset & Dinner
-    - Sunset view over ${city} followed by leisurely seasonal dinner.
-`).join('\n')}
-
-------------------------------------------------------------------------
-3. GASTRONOMY & CULINARY HIGHLIGHTS
-------------------------------------------------------------------------
-• Seek out neighborhood spots filled with local residents rather than
-  menus with English translations posted right on tourist thoroughfares.
-• Always ask for seasonal recommendations from your servers.
-
-------------------------------------------------------------------------
-4. PRACTICAL LOGISTICS & PACKING
-------------------------------------------------------------------------
-• Keep digital & physical copies of your travel documents.
-• Download offline transit maps (Google Maps / Citymapper).
-• Universal power adapter, lightweight rain shell, and reusable bottle.
-
-========================================================================
-Generated with precision by Wayfarer — Your AI Travel Atelier
-========================================================================
-`;
-
-    return new Blob([travelDossierContent], { type: 'text/plain;charset=utf-8' });
+    const blob = await res.blob();
+    if (blob.size < 50) {
+      throw new Error('Received an empty document. Please try again.');
+    }
+    return blob;
   },
 
   async chat(message: string, sessionId: string | null = null, history: any[] = []): Promise<ChatResponse> {
