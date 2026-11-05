@@ -17,3 +17,4 @@ else
     echo "Deploying production build to Vercel (--prod)..."
     $VERCEL_BIN --prod
 fi
+

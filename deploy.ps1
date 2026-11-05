@@ -22,3 +22,4 @@ if ($Preview) {
     Write-Host "Deploying production build to Vercel (--prod)..." -ForegroundColor Green
     Invoke-Expression "$vercelCmd --prod"
 }
+
