@@ -1,11 +1,10 @@
 .section {
-  padding: 100px 20px;
-  position: relative;
-  background: var(--bg-cream);
+  padding: 80px 24px;
+  background: #FFFFFF;
 }
 
 .container {
-  max-width: 1240px;
+  max-width: 1140px;
   margin: 0 auto;
 }
 
@@ -13,9 +12,9 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: 48px;
+  margin-bottom: 40px;
   flex-wrap: wrap;
-  gap: 24px;
+  gap: 20px;
 }
 
 .titleCol {
@@ -23,265 +22,172 @@
 }
 
 .eyebrow {
-  font-size: 0.76rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--sunset-orange);
-  margin-bottom: 10px;
+  color: #000000;
+  background: #F4F4F5;
+  padding: 4px 10px;
+  border-radius: 9999px;
   display: inline-block;
-}
-
-.title {
-  font-size: clamp(2rem, 3.5vw, 2.8rem);
   margin-bottom: 12px;
 }
 
+.title {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  color: #000000;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+
 .subtitle {
-  font-size: 1.05rem;
-  color: var(--text-body);
-}
-
-/* Filter Tabs */
-.filterTabs {
-  display: flex;
-  gap: 8px;
-  background: var(--bg-warm);
-  padding: 5px;
-  border-radius: var(--r-full);
-  border: 1px solid var(--border-light);
-  overflow-x: auto;
-  max-width: 100%;
-}
-
-.tabBtn {
-  padding: 8px 18px;
-  border-radius: var(--r-full);
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.tabBtn:hover {
-  color: var(--text-dark);
-}
-
-.tabActive {
-  background: var(--bg-white);
-  color: var(--text-dark);
-  box-shadow: var(--shadow-sm);
+  font-size: 1rem;
+  color: #71717A;
 }
 
 /* Grid */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
 }
 
 /* Card */
 .card {
-  background: var(--bg-white);
-  border-radius: var(--r-lg);
+  background: #FFFFFF;
+  border: 1px solid #E4E4E7;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-light);
-  transition: all var(--t-normal);
   display: flex;
   flex-direction: column;
-  cursor: pointer;
-  position: relative;
-}
-
-.card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
-  border-color: rgba(232, 101, 43, 0.2);
-}
-
-/* Image */
-.imageWrapper {
-  position: relative;
-  height: 250px;
-  overflow: hidden;
-}
-
-.cardImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.card:hover .cardImg {
-  transform: scale(1.06);
-}
-
-.imageOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.3) 0%,
-    transparent 40%,
-    rgba(0, 0, 0, 0.65) 100%
-  );
-}
-
-/* Wishlist Heart Button */
-.wishlistBtn {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  z-index: 4;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition: all 0.2s ease;
 }
 
-.wishlistBtn:hover {
-  transform: scale(1.12);
-  background: rgba(0, 0, 0, 0.65);
+.card:hover {
+  border-color: #000000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
 }
 
-.wishlistActive {
-  background: #FFFFFF !important;
-  border-color: #FFFFFF !important;
-  box-shadow: 0 4px 14px rgba(232, 101, 43, 0.4);
+.imageWrap {
+  position: relative;
+  width: 100%;
+  height: 210px;
+  background: #F4F4F5;
+  overflow: hidden;
 }
 
-/* Image Badges */
-.countryBadge {
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .image {
+  transform: scale(1.03);
+}
+
+.durationBadge {
   position: absolute;
-  top: 14px;
-  left: 14px;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(12px);
+  top: 12px;
+  left: 12px;
+  background: rgba(0, 0, 0, 0.85);
   color: #FFFFFF;
-  padding: 5px 12px;
-  border-radius: var(--r-full);
-  font-size: 0.75rem;
-  font-weight: 600;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.audioBadge {
-  position: absolute;
-  bottom: 14px;
-  left: 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(27, 127, 191, 0.85);
-  backdrop-filter: blur(10px);
-  color: #FFFFFF;
-  padding: 4px 10px;
-  border-radius: var(--r-full);
   font-size: 0.72rem;
   font-weight: 600;
-}
-
-.seasonTag {
-  position: absolute;
-  bottom: 14px;
-  right: 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
-  color: rgba(255, 255, 255, 0.9);
   padding: 4px 10px;
-  border-radius: var(--r-full);
-  font-size: 0.72rem;
-  font-weight: 500;
+  border-radius: 9999px;
+  backdrop-filter: blur(4px);
 }
 
-/* Body */
-.cardBody {
-  padding: 22px 24px;
+.cardContent {
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   flex: 1;
 }
 
-.cityRow {
+.cardTop {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .cityName {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 1.55rem;
-  font-weight: 400;
-  color: var(--text-dark);
-}
-
-.ratingBox {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.ratingVal {
-  font-size: 0.88rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: var(--text-dark);
+  color: #000000;
+  letter-spacing: -0.02em;
 }
 
-.reviewsVal {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-.priceRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.priceBadge {
-  font-size: 0.74rem;
-  font-weight: 700;
-  color: #2D8B57;
-  background: rgba(45, 139, 87, 0.08);
-  padding: 2px 8px;
-  border-radius: var(--r-full);
-}
-
-.highlightText {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.countryName {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #71717A;
 }
 
 .tagline {
   font-size: 0.88rem;
-  color: var(--text-body);
-  line-height: 1.55;
+  color: #52525B;
+  line-height: 1.5;
   margin-bottom: 20px;
+  flex: 1;
 }
 
-/* Buttons */
-.btnRow {
+.cardActions {
   display: flex;
   align-items: center;
   gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid #F4F4F5;
+}
+
+.readBtn {
+  flex: 1;
+  background: #FFFFFF;
+  color: #000000;
+  border: 1px solid #E4E4E7;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.readBtn:hover {
+  background: #F4F4F5;
+  border-color: #000000;
+}
+
+.planCardBtn {
+  flex: 1;
+  background: #000000;
+  color: #FFFFFF;
+  border: 1px solid #000000;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.planCardBtn:hover {
+  background: #27272A;
+  border-color: #27272A;
 }
 
 @media (max-width: 640px) {

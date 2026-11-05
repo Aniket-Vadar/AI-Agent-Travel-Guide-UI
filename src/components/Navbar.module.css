@@ -4,33 +4,18 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  padding: 20px 0;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.scrolled {
-  padding: 12px 0;
-  background: rgba(250, 247, 242, 0.92);
-  backdrop-filter: blur(20px) saturate(1.2);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.04);
-}
-
-/* On hero: white text; scrolled: dark text */
-.heroMode .brandName,
-.heroMode .navLink {
-  color: white;
-}
-
-.heroMode .navLink:hover {
-  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid #E4E4E7;
+  padding: 14px 0;
+  transition: all 0.2s ease;
 }
 
 .inner {
-  max-width: 1280px;
+  max-width: 1140px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -45,107 +30,96 @@
 }
 
 .brandIcon {
-  font-size: 1.6rem;
+  font-size: 1.2rem;
+  color: #000000;
 }
 
 .brandName {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 1.5rem;
-  color: var(--text-dark);
-  transition: color 0.3s ease;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #000000;
 }
 
 .brandBadge {
-  font-size: 0.6rem;
+  font-size: 0.65rem;
   font-weight: 700;
+  letter-spacing: 0.05em;
+  background: #000000;
+  color: #FFFFFF;
   padding: 2px 6px;
   border-radius: 4px;
-  background: var(--sunset-orange);
-  color: white;
-  letter-spacing: 0.05em;
 }
 
-/* Nav */
+/* Nav Links */
 .navLinks {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
 }
 
 .navLink {
   font-size: 0.88rem;
   font-weight: 500;
-  color: var(--text-body);
-  transition: color 0.2s ease;
-  position: relative;
-  padding: 4px 0;
-}
-
-.navLink::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--sunset-orange);
-  transition: width 0.3s ease;
-  border-radius: 2px;
-}
-
-.navLink:hover::after {
-  width: 100%;
+  color: #52525B;
+  transition: color 0.15s ease;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .navLink:hover {
-  color: var(--sunset-orange);
+  color: #000000;
 }
 
-/* Right */
+/* Right Group */
 .rightGroup {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.chatBtn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--bg-white);
-  border: 1px solid var(--border-medium);
-  display: flex;
+.statusPill {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  color: var(--text-body);
-  transition: all 0.2s ease;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #52525B;
+  background: #F4F4F5;
+  border: 1px solid #E4E4E7;
+  padding: 4px 10px;
+  border-radius: 9999px;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+}
+
+.chatBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: #000000;
+  color: #FFFFFF;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  border: 1px solid #000000;
+  transition: all 0.15s ease;
 }
 
 .chatBtn:hover {
-  border-color: var(--sunset-orange);
-  color: var(--sunset-orange);
-  transform: scale(1.05);
+  background: #27272A;
+  border-color: #27272A;
+  transform: translateY(-1px);
 }
 
-/* Mobile menu button */
-.mobileMenuBtn {
-  display: none;
-  width: 40px;
-  height: 40px;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-dark);
-  border-radius: 8px;
-}
-
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .navLinks {
     display: none;
-  }
-  .chatBtn {
-    display: none;
-  }
-  .mobileMenuBtn {
-    display: flex;
   }
 }

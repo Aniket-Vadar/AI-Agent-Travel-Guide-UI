@@ -1,191 +1,106 @@
 .footer {
-  background: var(--bg-dark);
-  color: white;
-  padding: 80px 24px 40px;
+  background: #09090B;
+  color: #FFFFFF;
+  padding: 60px 24px 36px;
+  border-top: 1px solid #18181B;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1140px;
   margin: 0 auto;
 }
 
 .topRow {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr 1fr 1.3fr;
-  gap: 48px;
-  padding-bottom: 48px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 32px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid #27272A;
 }
 
-/* Brand */
 .brandCol {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  max-width: 380px;
 }
 
 .brandWrap {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.brandIcon {
-  font-size: 1.5rem;
+  margin-bottom: 12px;
 }
 
 .brandName {
-  font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 1.5rem;
-  color: white;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
 }
 
 .brandBadge {
-  font-size: 0.6rem;
+  font-size: 0.65rem;
   font-weight: 700;
   padding: 2px 6px;
   border-radius: 4px;
-  background: var(--sunset-orange);
-  color: white;
+  background: #27272A;
+  color: #FFFFFF;
+  border: 1px solid #3F3F46;
 }
 
-.brandDesc {
+.brandTagline {
   font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.45);
-  line-height: 1.65;
+  color: #A1A1AA;
+  line-height: 1.6;
+}
+
+.linksCol {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.colTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #FFFFFF;
+  margin-bottom: 4px;
+}
+
+.link {
+  font-size: 0.85rem;
+  color: #A1A1AA;
+  transition: color 0.15s ease;
+  text-decoration: none;
+}
+
+.link:hover {
+  color: #FFFFFF;
+}
+
+.bottomRow {
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 0.8rem;
+  color: #71717A;
 }
 
 .engineStatus {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.5);
+  gap: 6px;
+  color: #A1A1AA;
 }
 
 .statusDot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #4ADE80;
-  animation: dotPulse 2s ease-in-out infinite;
-}
-
-@keyframes dotPulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-/* Links columns */
-.linksCol {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.colTitle {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 4px;
-}
-
-.link {
-  font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.45);
-  transition: color 0.2s ease;
-}
-
-.link:hover {
-  color: white;
-}
-
-/* Newsletter */
-.gazetteCol {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.gazetteDesc {
-  font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.45);
-  line-height: 1.6;
-}
-
-.subscribeForm {
-  display: flex;
-  gap: 8px;
-}
-
-.emailInput {
-  flex: 1;
-  padding: 10px 16px;
-  border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
-  font-size: 0.88rem;
-  outline: none;
-  transition: border-color 0.2s ease;
-}
-
-.emailInput::placeholder {
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.emailInput:focus {
-  border-color: var(--sunset-orange);
-}
-
-.subscribedMsg {
-  font-size: 0.85rem;
-  color: #4ADE80;
-  font-weight: 500;
-}
-
-/* Bottom */
-.bottomRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 32px;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.copyright {
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.legalLinks {
-  display: flex;
-  gap: 24px;
-}
-
-.legalLink {
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.3);
-  transition: color 0.2s ease;
-}
-
-.legalLink:hover {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-@media (max-width: 900px) {
-  .topRow {
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
-  }
-}
-
-@media (max-width: 600px) {
-  .topRow {
-    grid-template-columns: 1fr;
-  }
+  background: #10B981;
 }

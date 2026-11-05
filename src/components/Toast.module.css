@@ -1,37 +1,37 @@
 .container {
   position: fixed;
-  bottom: 28px;
-  left: 28px;
+  bottom: 24px;
+  left: 24px;
   z-index: 99999;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   pointer-events: none;
-  max-width: 400px;
+  max-width: 380px;
 }
 
 .toast {
   pointer-events: auto;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 18px;
-  background: #FFFFFF;
-  border-radius: 14px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  transition: all 0.25s ease;
+  gap: 10px;
+  padding: 10px 16px;
+  background: #000000;
+  color: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid #27272A;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.2s ease forwards;
 }
 
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(16px) scale(0.96);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
 
@@ -40,51 +40,25 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  color: #FFFFFF;
 }
 
 .msg {
-  font-size: 0.86rem;
-  color: var(--text-dark);
+  font-size: 0.85rem;
+  color: #FFFFFF;
   line-height: 1.4;
   margin: 0;
   flex: 1;
 }
 
 .closeBtn {
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: none;
+  border: none;
+  color: #A1A1AA;
+  cursor: pointer;
   padding: 2px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
 }
 
 .closeBtn:hover {
-  color: var(--text-dark);
-  background: var(--bg-warm);
-}
-
-.success .iconBox {
-  color: var(--forest-green);
-}
-
-.error .iconBox {
-  color: #DC2626;
-}
-
-.info .iconBox {
-  color: var(--sunset-orange);
-}
-
-.success {
-  border-left: 3px solid var(--forest-green);
-}
-
-.error {
-  border-left: 3px solid #DC2626;
-}
-
-.info {
-  border-left: 3px solid var(--sunset-orange);
+  color: #FFFFFF;
 }

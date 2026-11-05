@@ -1,26 +1,24 @@
 .wrapper {
-  background: var(--bg-white);
-  border-bottom: 1px solid var(--border-light);
+  background: #FFFFFF;
+  border-bottom: 1px solid #E4E4E7;
   position: sticky;
-  top: 72px;
+  top: 61px;
   z-index: 20;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1140px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
 .track {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   overflow-x: auto;
   padding: 12px 0;
   scrollbar-width: none;
-  -ms-overflow-style: none;
 }
 
 .track::-webkit-scrollbar {
@@ -30,39 +28,40 @@
 .item {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 18px;
-  border-radius: var(--r-full);
-  background: transparent;
-  color: var(--text-body);
-  font-size: 0.85rem;
-  font-weight: 600;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: #FFFFFF;
+  color: #52525B;
+  font-size: 0.82rem;
+  font-weight: 500;
   white-space: nowrap;
-  transition: all 0.25s var(--ease-out);
-  position: relative;
-  border: 1px solid transparent;
+  border: 1px solid #E4E4E7;
+  transition: all 0.15s ease;
 }
 
 .item:hover {
-  color: var(--text-dark);
-  background: var(--bg-warm);
+  color: #000000;
+  border-color: #A1A1AA;
 }
 
 .itemActive {
-  background: var(--text-dark);
+  background: #000000;
   color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(26, 22, 20, 0.15);
+  border-color: #000000;
+  font-weight: 600;
 }
 
 .itemActive:hover {
-  background: #2A2624;
+  background: #27272A;
   color: #FFFFFF;
+  border-color: #27272A;
 }
 
-.emoji {
-  font-size: 1.1rem;
+.icon {
+  font-size: 0.95rem;
 }
 
 .label {
-  letter-spacing: 0.01em;
+  letter-spacing: -0.01em;
 }

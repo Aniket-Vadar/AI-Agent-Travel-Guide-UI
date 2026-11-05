@@ -1,122 +1,52 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import { MapPin, Headphones, FileText, ArrowRight } from 'lucide-react';
+import React from 'react';
 import styles from './HowItWorks.module.css';
 
 interface HowItWorksProps {
-  onExploreClick: () => void;
-  onPlanClick: () => void;
-  onStoryDemo: (city: string) => void;
+  onExploreClick?: () => void;
+  onPlanClick?: () => void;
+  onStoryDemo?: (city: string) => void;
 }
 
-export const HowItWorks: React.FC<HowItWorksProps> = ({
-  onExploreClick,
-  onPlanClick,
-  onStoryDemo,
-}) => {
-  const sectionRef = useRef<HTMLElement>(null);
+const STEPS = [
+  {
+    num: '01',
+    title: 'Choose Destination',
+    desc: 'Search any city or select from curated destinations. The Intake Agent analyzes your destination, travel duration, and style.',
+  },
+  {
+    num: '02',
+    title: 'Autonomous Research',
+    desc: 'Researcher, Curator, and Storyteller agents fetch real historical landmarks from Wikipedia, calculate routes, and compose narratives.',
+  },
+  {
+    num: '03',
+    title: 'Get Audio & PDF Itinerary',
+    desc: 'Listen to instant MP3 audio narrations generated via TTS and download complete, professionally formatted PDF travel dossiers.',
+  },
+];
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.querySelectorAll('.reveal').forEach((el, i) => {
-              setTimeout(() => el.classList.add('visible'), i * 150);
-            });
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
-
+export const HowItWorks: React.FC<HowItWorksProps> = () => {
   return (
-    <section className={styles.section} id="how-it-works" ref={sectionRef}>
+    <section className={styles.section} id="how-it-works">
       <div className={styles.container}>
-        {/* Header */}
-        <div className={`${styles.header} reveal`}>
+        <div className={styles.header}>
           <span className={styles.eyebrow}>How It Works</span>
-          <h2 className={styles.title}>Your Journey in 3 Simple Steps</h2>
+          <h2 className={styles.title}>Simple 3-Step Travel Planning</h2>
           <p className={styles.subtitle}>
-            From choosing a destination to holding a complete travel guide — our AI does the heavy lifting while you dream.
+            A network of specialized AI agents collaborates behind the scenes to build your journey.
           </p>
         </div>
 
-        {/* 3 Cards */}
-        <div className={styles.grid}>
-          {/* Step 1 */}
-          <div className={`${styles.card} reveal`}>
-            <div className={styles.cardHeader}>
-              <div className={`${styles.iconWrap} ${styles.iconOrange}`}>
-                <MapPin size={28} />
-              </div>
-              <span className={styles.stepNum}>Step 01</span>
+        <div className={styles.stepsGrid}>
+          {STEPS.map((s) => (
+            <div key={s.num} className={styles.stepCard}>
+              <div className={styles.stepNumber}>{s.num}</div>
+              <h3 className={styles.stepTitle}>{s.title}</h3>
+              <p className={styles.stepDesc}>{s.desc}</p>
             </div>
-            <h3 className={styles.cardTitle}>Choose a Destination</h3>
-            <p className={styles.cardDesc}>
-              Search for any city or pick from our curated collection. Whether it&apos;s a 
-              weekend escape or a grand tour — just tell us where.
-            </p>
-            <button
-              type="button"
-              className={`${styles.cardLink} ${styles.linkOrange}`}
-              onClick={onExploreClick}
-            >
-              <span>Browse Destinations</span>
-              <ArrowRight size={14} />
-            </button>
-          </div>
-
-          {/* Step 2 */}
-          <div className={`${styles.card} reveal`}>
-            <div className={styles.cardHeader}>
-              <div className={`${styles.iconWrap} ${styles.iconBlue}`}>
-                <Headphones size={28} />
-              </div>
-              <span className={styles.stepNum}>Step 02</span>
-            </div>
-            <h3 className={styles.cardTitle}>Explore Stories & Audio</h3>
-            <p className={styles.cardDesc}>
-              Immerse yourself in AI-crafted narratives about each destination. Listen to 
-              voice-guided tours covering history, culture, and hidden gems.
-            </p>
-            <button
-              type="button"
-              className={`${styles.cardLink} ${styles.linkBlue}`}
-              onClick={() => onStoryDemo('Kyoto')}
-            >
-              <span>Listen to Kyoto Preview</span>
-              <ArrowRight size={14} />
-            </button>
-          </div>
-
-          {/* Step 3 */}
-          <div className={`${styles.card} reveal`}>
-            <div className={styles.cardHeader}>
-              <div className={`${styles.iconWrap} ${styles.iconGreen}`}>
-                <FileText size={28} />
-              </div>
-              <span className={styles.stepNum}>Step 03</span>
-            </div>
-            <h3 className={styles.cardTitle}>Get Your Travel Guide</h3>
-            <p className={styles.cardDesc}>
-              Receive a comprehensive day-by-day itinerary as a downloadable PDF — complete 
-              with tips, timings, and local recommendations.
-            </p>
-            <button
-              type="button"
-              className={`${styles.cardLink} ${styles.linkGreen}`}
-              onClick={onPlanClick}
-            >
-              <span>Create Your Itinerary</span>
-              <ArrowRight size={14} />
-            </button>
-          </div>
+          ))}
         </div>
       </div>
     </section>
