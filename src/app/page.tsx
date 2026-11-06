@@ -8,6 +8,7 @@ import { CategoryStrip } from '@/components/CategoryStrip';
 import { DestinationsGrid } from '@/components/DestinationsGrid';
 import { HowItWorks } from '@/components/HowItWorks';
 import { TripPlannerForm } from '@/components/TripPlannerForm';
+import { TripPlannerModal } from '@/components/TripPlannerModal';
 import { StoryView } from '@/components/StoryView';
 import { ChatbotDrawer } from '@/components/ChatbotDrawer';
 import { Footer } from '@/components/Footer';
@@ -19,12 +20,13 @@ export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [currentStory, setCurrentStory] = useState<Story | null>(null);
 
-  // Trip planner form state
-  const [planCity, setPlanCity] = useState('Kyoto');
-  const [planCountry, setPlanCountry] = useState('Japan');
+  // Trip planner state
+  const [planCity, setPlanCity] = useState('Pune');
+  const [planCountry, setPlanCountry] = useState('India');
   const [planDays, setPlanDays] = useState(5);
 
-  // UI state
+  // UI modal states
+  const [isPlannerModalOpen, setIsPlannerModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
@@ -60,27 +62,17 @@ export default function HomePage() {
     }
   };
 
+  // Plan trip action: Opens the rich planner modal window
   const handlePlanDestination = (dest: Destination) => {
     setPlanCity(dest.city);
     setPlanCountry(dest.country);
-    setCurrentStory(null);
-    const planElement = document.getElementById('plan-trip');
-    if (planElement) {
-      planElement.scrollIntoView({ behavior: 'smooth' });
-    }
-    addToast(`Planning trip for ${dest.city}`, 'info');
+    setIsPlannerModalOpen(true);
   };
 
   const handleStoryPlan = (city: string, country?: string) => {
     setPlanCity(city);
-    setPlanCountry(country || '');
-    setCurrentStory(null);
-    setTimeout(() => {
-      const planElement = document.getElementById('plan-trip');
-      if (planElement) {
-        planElement.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 150);
+    if (country) setPlanCountry(country);
+    setIsPlannerModalOpen(true);
   };
 
   return (
@@ -92,9 +84,7 @@ export default function HomePage() {
       <Navbar
         onOpenChat={() => setIsChatOpen(true)}
         onNavigatePlan={() => {
-          setCurrentStory(null);
-          const el = document.getElementById('plan-trip');
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
+          setIsPlannerModalOpen(true);
         }}
         onNavigateStories={() => {
           setCurrentStory(null);
@@ -123,9 +113,7 @@ export default function HomePage() {
                 setPlanCity(city);
                 if (country) setPlanCountry(country);
                 if (days) setPlanDays(days);
-                const el = document.getElementById('plan-trip');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-                addToast(`Configuring ${days || 5}-day itinerary for ${city}`, 'info');
+                setIsPlannerModalOpen(true);
               }}
               onSelectStory={(city, country) => handleLoadStory(city, country)}
             />
@@ -154,10 +142,21 @@ export default function HomePage() {
               initialCountry={planCountry}
               initialDays={planDays}
               onToast={addToast}
+              onOpenModal={() => setIsPlannerModalOpen(true)}
             />
           </>
         )}
       </main>
+
+      {/* DEDICATED TRIP PLANNER WINDOW / MODAL WITH AUDIO BOOK & STORY OPTION */}
+      <TripPlannerModal
+        isOpen={isPlannerModalOpen}
+        onClose={() => setIsPlannerModalOpen(false)}
+        initialCity={planCity}
+        initialCountry={planCountry}
+        initialDays={planDays}
+        onToast={addToast}
+      />
 
       {/* AI Assistant Chat Drawer */}
       <ChatbotDrawer

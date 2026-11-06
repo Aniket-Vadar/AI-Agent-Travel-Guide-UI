@@ -51,7 +51,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isLoading]);
+  }, [messages, isLoading, isOpen]);
 
   const handleSend = async (messageText?: string) => {
     const textToSend = messageText || input;
@@ -92,7 +92,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
       }
 
       setMessages((prev) => [...prev, ...newMsgs]);
-    } catch (err: any) {
+    } catch {
       setMessages((prev) => [
         ...prev,
         {
@@ -124,7 +124,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
       link.remove();
       URL.revokeObjectURL(url);
       onToast('Custom PDF Dossier downloaded successfully! ✨', 'success');
-    } catch (err: any) {
+    } catch {
       onToast('PDF download failed. Please try from Trip Architect section.', 'error');
     } finally {
       setDownloadingPdf(false);
@@ -133,36 +133,43 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
 
   return (
     <>
-      {/* Floating Action Button */}
+      {/* Floating Action Button (Cleanly hidden when drawer is open) */}
       <button
         type="button"
         className={`${styles.fab} ${isOpen ? styles.fabHidden : ''}`}
         onClick={onToggle}
         aria-label="Open AI Concierge"
       >
-        <span className={styles.fabRipple}></span>
         <MessageSquare size={22} />
         <span className={styles.fabBadge}>AI</span>
       </button>
 
+      {/* Backdrop overlay */}
+      {isOpen && <div className={styles.backdrop} onClick={onToggle} />}
+
       {/* Slide-out Drawer */}
       <div className={`${styles.drawer} ${isOpen ? styles.drawerOpen : ''}`}>
         {/* Header */}
-        <div className={styles.header}>
-          <div className={styles.headerInfo}>
-            <div className={styles.avatar}>
-              <Bot size={18} />
+        <div className={styles.drawerHeader}>
+          <div className={styles.headerLeft}>
+            <div className={styles.headerIcon}>
+              <Bot size={20} />
             </div>
             <div>
-              <h3 className={styles.headerName}>Wayfarer Concierge</h3>
+              <h3 className={styles.headerTitle}>Wayfarer Concierge</h3>
               <div className={styles.headerStatus}>
-                <span className={styles.greenDot}></span>
+                <span className={styles.statusDot}></span>
                 <span>Active Intelligence</span>
               </div>
             </div>
           </div>
-          <button type="button" className={styles.closeBtn} onClick={onToggle}>
-            <X size={18} />
+          <button
+            type="button"
+            className={styles.closeButton}
+            onClick={onToggle}
+            aria-label="Close Chat"
+          >
+            <X size={16} />
           </button>
         </div>
 
@@ -177,42 +184,55 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
           </div>
         )}
 
-        {/* Messages */}
+        {/* Message History */}
         <div className={styles.messageList} ref={scrollRef}>
           {messages.map((m, i) => (
             <div
               key={i}
-              className={`${styles.msgRow} ${m.role === 'user' ? styles.userRow : styles.assistantRow}`}
+              className={`${styles.messageRow} ${
+                m.role === 'user' ? styles.messageUser : styles.messageAssistant
+              }`}
             >
               {m.role === 'assistant' && (
                 <div className={styles.msgAvatar}>
                   <Sparkles size={14} />
                 </div>
               )}
-              <div className={`${styles.bubble} ${m.role === 'user' ? styles.userBubble : styles.assistantBubble}`}>
+              <div
+                className={`${styles.bubble} ${
+                  m.role === 'user' ? styles.bubbleUser : styles.bubbleAssistant
+                }`}
+              >
                 <p>{m.text}</p>
 
                 {m.isPdfCta && m.ctaRequest && (
-                  <button
-                    type="button"
-                    className={styles.inChatPdfBtn}
-                    onClick={() => handleDownloadCtaPdf(m.ctaRequest!)}
-                    disabled={downloadingPdf}
-                  >
-                    <Download size={14} />
-                    <span>{downloadingPdf ? 'Generating PDF...' : `Download ${m.ctaRequest.city} PDF Guide`}</span>
-                  </button>
+                  <div className={styles.inChatPdfCard}>
+                    <button
+                      type="button"
+                      className={styles.inChatPdfBtn}
+                      onClick={() => handleDownloadCtaPdf(m.ctaRequest!)}
+                      disabled={downloadingPdf}
+                    >
+                      <Download size={14} />
+                      <span>
+                        {downloadingPdf
+                          ? 'Generating PDF...'
+                          : `Download ${m.ctaRequest.city} PDF Guide`}
+                      </span>
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
           ))}
 
+          {/* Typing indicator */}
           {isLoading && (
-            <div className={`${styles.msgRow} ${styles.assistantRow}`}>
+            <div className={`${styles.messageRow} ${styles.messageAssistant}`}>
               <div className={styles.msgAvatar}>
                 <Sparkles size={14} />
               </div>
-              <div className={`${styles.bubble} ${styles.assistantBubble}`}>
+              <div className={`${styles.bubble} ${styles.bubbleAssistant}`}>
                 <div className={styles.typingDots}>
                   <span></span>
                   <span></span>
@@ -223,24 +243,27 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
           )}
         </div>
 
-        {/* Starter prompts if only initial message */}
+        {/* Curated inquiries starter chips */}
         {messages.length === 1 && (
           <div className={styles.starterSection}>
             <span className={styles.starterLabel}>Curated inquiries:</span>
-            {STARTER_PROMPTS.map((prompt) => (
-              <button
-                key={prompt}
-                type="button"
-                className={styles.starterBtn}
-                onClick={() => handleSend(prompt)}
-              >
-                <span>{prompt}</span>
-              </button>
-            ))}
+            <div className={styles.starterPromptsList}>
+              {STARTER_PROMPTS.map((prompt) => (
+                <button
+                  key={prompt}
+                  type="button"
+                  className={styles.starterBtn}
+                  onClick={() => handleSend(prompt)}
+                >
+                  <Sparkles size={13} style={{ flexShrink: 0, opacity: 0.6 }} />
+                  <span>{prompt}</span>
+                </button>
+              ))}
+            </div>
           </div>
         )}
 
-        {/* Input Form */}
+        {/* Bottom Input Form */}
         <form
           className={styles.inputForm}
           onSubmit={(e) => {
@@ -260,6 +283,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
             type="submit"
             className={styles.sendBtn}
             disabled={!input.trim() || isLoading}
+            aria-label="Send message"
           >
             <Send size={16} />
           </button>
