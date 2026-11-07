@@ -154,22 +154,25 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
     setCurrentStep(0);
     setGeneratedPdfBlob(null);
 
-    // Progress animation intervals
+    // Progress animation intervals (continuous animation while still generating)
     const pInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev < 30) {
           setCurrentStep(1);
-          return prev + 6;
+          return prev + 5;
         } else if (prev < 65) {
           setCurrentStep(2);
-          return prev + 4;
+          return prev + 3;
         } else if (prev < 90) {
           setCurrentStep(3);
-          return prev + 2;
+          return prev + 1.5;
+        } else if (prev < 98) {
+          setCurrentStep(3);
+          return prev + 0.4;
         }
         return prev;
       });
-    }, 400);
+    }, 350);
 
     try {
       const blob = await api.generatePDF(
@@ -320,7 +323,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                   </div>
                   <div className={styles.progressLabel}>
                     <span>Compiling Neural Travel Model</span>
-                    <span>{progress}%</span>
+                    <span>{Math.round(progress)}%</span>
                   </div>
                 </div>
 

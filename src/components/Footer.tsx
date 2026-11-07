@@ -16,7 +16,7 @@ export const Footer: React.FC = () => {
             </div>
             <p className={styles.brandTagline}>
               Autonomous multi-agent travel companion. Discover global destinations through
-              AI-generated stories, voice narrations, and custom PDF itineraries.
+              AI-curated stories, voice narrations, and custom PDF itineraries.
             </p>
           </div>
 
@@ -29,32 +29,20 @@ export const Footer: React.FC = () => {
             <a href="#plan-trip" className={styles.link}>Custom Trip Planner</a>
           </div>
 
-          {/* API Links */}
+          {/* Travel Experiences */}
           <div className={styles.linksCol}>
-            <div className={styles.colTitle}>Developer & API</div>
-            <a
-              href="https://ai-agent-travel-guide-backend.onrender.com/docs"
-              target="_blank"
-              rel="noreferrer"
-              className={styles.link}
-            >
-              Interactive Swagger API Docs
+            <div className={styles.colTitle}>Experiences</div>
+            <a href="#plan-trip" className={styles.link}>
+              Bespoke PDF Itineraries
             </a>
-            <a
-              href="https://github.com/Aniket-Vadar/AI-Agent-Travel-Guide-Backend"
-              target="_blank"
-              rel="noreferrer"
-              className={styles.link}
-            >
-              Backend GitHub Repository
+            <a href="#destinations" className={styles.link}>
+              Voice Narrated Audio Stories
             </a>
-            <a
-              href="https://github.com/Aniket-Vadar/AI-Agent-Travel-Guide-UI"
-              target="_blank"
-              rel="noreferrer"
-              className={styles.link}
-            >
-              Frontend GitHub Repository
+            <a href="#destinations" className={styles.link}>
+              Cultural Heritage Guides
+            </a>
+            <a href="#plan-trip" className={styles.link}>
+              Day-by-Day Route Planner
             </a>
           </div>
         </div>
@@ -63,7 +51,7 @@ export const Footer: React.FC = () => {
           <div>© {new Date().getFullYear()} Wayfarer AI Travel Guide. All rights reserved.</div>
           <div className={styles.engineStatus}>
             <span className={styles.statusDot} />
-            <span>Connected to Render Backend (FastAPI + Gemini)</span>
+            <span>Autonomous Neural Travel Intelligence</span>
           </div>
         </div>
       </div>

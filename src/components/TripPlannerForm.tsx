@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Download, Sparkles, Loader2, CheckCircle2, Maximize2, Headphones } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Download, Sparkles, Loader2, CheckCircle2, Maximize2, Compass } from 'lucide-react';
 import styles from './TripPlannerForm.module.css';
 import { api } from '@/services/api';
 import { lookupCityCountrySync, resolveCityCountry } from '@/utils/cityCountryMap';
@@ -22,6 +22,15 @@ const VIBES = [
   'Fast-Paced Explorer',
 ];
 
+const GENERATION_PHRASES = [
+  'Analyzing cultural heritage & geographical coordinates...',
+  'Sourcing authentic landmarks & local food spots...',
+  'Sequencing optimal day-by-day transit and routes...',
+  'Formatting vector typography & printable PDF dossier...',
+  'Polishing insider tips and packing recommendations...',
+  'Finalizing high-resolution itinerary document...',
+];
+
 export const TripPlannerForm: React.FC<TripPlannerFormProps> = ({
   initialCity = 'Pune',
   initialCountry = 'India',
@@ -38,7 +47,8 @@ export const TripPlannerForm: React.FC<TripPlannerFormProps> = ({
   // Animated generation progress state
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [stepLabel, setStepLabel] = useState('Initializing AI agents...');
+  const [stepLabel, setStepLabel] = useState(GENERATION_PHRASES[0]);
+  const phraseIndexRef = useRef(0);
 
   useEffect(() => {
     if (initialCity) {
@@ -83,24 +93,26 @@ export const TripPlannerForm: React.FC<TripPlannerFormProps> = ({
     }
 
     setIsGenerating(true);
-    setProgress(12);
-    setStepLabel(`1/4: Analyzing cultural heritage & map coordinates for ${city}...`);
+    setProgress(15);
+    phraseIndexRef.current = 0;
+    setStepLabel(GENERATION_PHRASES[0]);
 
-    const pInterval = setInterval(() => {
+    // Continuously cycle phrases every 2.2 seconds so user sees continuous activity
+    const phraseInterval = setInterval(() => {
+      phraseIndexRef.current = (phraseIndexRef.current + 1) % GENERATION_PHRASES.length;
+      setStepLabel(GENERATION_PHRASES[phraseIndexRef.current]);
+    }, 2200);
+
+    // Continuous progress bar that NEVER freezes, advancing up to 98% smoothly
+    const progressInterval = setInterval(() => {
       setProgress((prev) => {
-        if (prev < 35) {
-          setStepLabel(`2/4: Sourcing authentic attractions & hidden culinary gems...`);
-          return prev + 6;
-        } else if (prev < 70) {
-          setStepLabel(`3/4: Optimizing day-by-day routes and pacing...`);
-          return prev + 4;
-        } else if (prev < 90) {
-          setStepLabel(`4/4: Formatting vector ReportLab PDF travel dossier...`);
-          return prev + 2;
-        }
+        if (prev < 40) return prev + 4;
+        if (prev < 75) return prev + 3;
+        if (prev < 90) return prev + 1.5;
+        if (prev < 98) return prev + 0.5; // keeps moving smoothly while still generating!
         return prev;
       });
-    }, 400);
+    }, 350);
 
     try {
       const blob = await api.generatePDF(
@@ -110,9 +122,10 @@ export const TripPlannerForm: React.FC<TripPlannerFormProps> = ({
         `Vibe: ${selectedVibe}. Balanced schedule.`
       );
 
-      clearInterval(pInterval);
+      clearInterval(phraseInterval);
+      clearInterval(progressInterval);
       setProgress(100);
-      setStepLabel(`✓ Generated! Downloading ${city} PDF...`);
+      setStepLabel(`✓ Complete! Downloading ${city} PDF Dossier...`);
 
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -127,9 +140,10 @@ export const TripPlannerForm: React.FC<TripPlannerFormProps> = ({
       setTimeout(() => {
         setIsGenerating(false);
         setProgress(0);
-      }, 3500);
+      }, 4000);
     } catch (err: any) {
-      clearInterval(pInterval);
+      clearInterval(phraseInterval);
+      clearInterval(progressInterval);
       setIsGenerating(false);
       onToast(err.message || 'Failed to generate travel guide', 'error');
     }
@@ -226,21 +240,36 @@ export const TripPlannerForm: React.FC<TripPlannerFormProps> = ({
               </div>
             </div>
 
-            {/* ANIMATED PROGRESS BAR WHEN GENERATING */}
+            {/* ACTIVE CONTINUOUS ANIMATION WHEN GENERATING */}
             {isGenerating && (
               <div className={styles.progressBox}>
                 <div className={styles.progressTopRow}>
                   <div className={styles.progressStatus}>
-                    <Loader2 size={16} className="animate-spin" />
-                    <span>{stepLabel}</span>
+                    <span className={styles.livePulseDot} />
+                    <span className={styles.phraseText}>{stepLabel}</span>
                   </div>
-                  <span className={styles.progressPercent}>{progress}%</span>
+                  <div className={styles.generatingBadge}>
+                    <Compass size={13} className={styles.spinIcon} />
+                    <span>{Math.round(progress)}%</span>
+                  </div>
                 </div>
+
+                {/* Animated progress bar with continuous moving wave shimmer */}
                 <div className={styles.progressTrack}>
                   <div
-                    className={styles.progressFill}
+                    className={`${styles.progressFill} ${progress < 100 ? styles.progressActiveAnimation : ''}`}
                     style={{ width: `${progress}%` }}
                   />
+                </div>
+
+                {/* Subtitle animation indicator */}
+                <div className={styles.subtextAnimation}>
+                  <div className={styles.waveDots}>
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <span>Neural agents active & generating itinerary dossier in real-time</span>
                 </div>
               </div>
             )}
@@ -253,8 +282,8 @@ export const TripPlannerForm: React.FC<TripPlannerFormProps> = ({
               >
                 {isGenerating ? (
                   <>
-                    <Loader2 size={16} className="animate-spin" />
-                    <span>Compiling PDF Itinerary ({progress}%)...</span>
+                    <Loader2 size={16} className={styles.spinIcon} />
+                    <span>Still Generating Itinerary & Dossier ({Math.round(progress)}%)...</span>
                   </>
                 ) : (
                   <>

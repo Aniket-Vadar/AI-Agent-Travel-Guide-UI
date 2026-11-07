@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Sparkles, MessageSquare } from 'lucide-react';
+import { Sparkles, Compass } from 'lucide-react';
 import styles from './Navbar.module.css';
 
 interface NavbarProps {
@@ -58,7 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenChat, onNavigatePlan, onNa
         <div className={styles.rightGroup}>
           <div className={styles.statusPill}>
             <span className={styles.statusDot} />
-            <span>API Online</span>
+            <span>Concierge Active</span>
           </div>
 
           <button
