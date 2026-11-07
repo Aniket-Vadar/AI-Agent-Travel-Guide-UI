@@ -695,6 +695,69 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
+/* Audio Generation Animation Bar */
+.audioGeneratingBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 14px 18px;
+  border-radius: 12px;
+}
+
+.audioGenHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.audioGenTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.audioGenPercent {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #34D399;
+}
+
+.audioGenProgressTrack {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.audioGenProgressFill {
+  height: 100%;
+  background: #10B981;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.audioGenProgressFill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  animation: shimmer 1.8s infinite ease-in-out;
+}
+
+.audioGenSubtext {
+  font-size: 0.74rem;
+  color: #A1A1AA;
+}
+
 /* Story Narrative Text Card */
 .narrativeCard {
   border: 1px solid #E4E4E7;

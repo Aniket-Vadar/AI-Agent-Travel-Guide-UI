@@ -68,8 +68,13 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
   const [story, setStory] = useState<Story | null>(null);
   const [isLoadingStory, setIsLoadingStory] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [isAudioGenerating, setIsAudioGenerating] = useState(false);
+  const [audioProgress, setAudioProgress] = useState(15);
+  const [audioStageText, setAudioStageText] = useState('Synthesizing bespoke audio guide...');
   const [audioDuration, setAudioDuration] = useState(0);
   const [audioCurrentTime, setAudioCurrentTime] = useState(0);
+  const [autoPlayAudioRequested, setAutoPlayAudioRequested] = useState(false);
+  const [audioKey, setAudioKey] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Escape key handler
@@ -127,6 +132,53 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
       loadStoryForCurrentCity();
     }
   }, [activeTab, city]);
+
+  // Audio generation animation when switching to Audio Tab or city changes
+  useEffect(() => {
+    if (activeTab === 'audio') {
+      setIsAudioGenerating(true);
+      setAudioProgress(15);
+      setAudioStageText(`Synthesizing bespoke audio guide for ${city || 'destination'}...`);
+
+      const aInterval = setInterval(() => {
+        setAudioProgress((prev) => {
+          if (prev < 35) {
+            setAudioStageText(`Composing cultural narrative for ${city || 'destination'}...`);
+            return prev + 4;
+          } else if (prev < 70) {
+            setAudioStageText('Synthesizing speech with Google Studio Voice & gTTS...');
+            return prev + 2.5;
+          } else if (prev < 92) {
+            setAudioStageText('Mastering acoustic stream & buffering...');
+            return prev + 1;
+          } else if (prev < 97) {
+            return prev + 0.3;
+          }
+          return prev;
+        });
+      }, 300);
+
+      return () => clearInterval(aInterval);
+    }
+  }, [activeTab, city, audioKey]);
+
+  const handleAudioCanPlay = () => {
+    if (audioRef.current) {
+      const dur = audioRef.current.duration;
+      if (dur && !isNaN(dur) && isFinite(dur)) {
+        setAudioDuration(dur);
+      }
+    }
+    setAudioProgress(100);
+    setIsAudioGenerating(false);
+
+    if (autoPlayAudioRequested && audioRef.current) {
+      audioRef.current.play().then(() => {
+        setIsPlayingAudio(true);
+      }).catch(() => {});
+      setAutoPlayAudioRequested(false);
+    }
+  };
 
   const loadStoryForCurrentCity = async () => {
     if (!city.trim()) return;
@@ -220,6 +272,12 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
 
   // Audio Playback Controls
   const toggleAudio = () => {
+    if (isAudioGenerating) {
+      setAutoPlayAudioRequested(true);
+      onToast('Audio guide is synthesizing. It will play automatically when ready.', 'info');
+      return;
+    }
+
     if (!audioRef.current) return;
     if (isPlayingAudio) {
       audioRef.current.pause();
@@ -544,12 +602,12 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
 
                   {/* Waveform Equalizer */}
                   <div className={styles.waveformContainer}>
-                    <div className={`${styles.waveBar} ${isPlayingAudio ? styles.waveBarActive : ''}`} />
-                    <div className={`${styles.waveBar} ${isPlayingAudio ? styles.waveBarActive : ''}`} />
-                    <div className={`${styles.waveBar} ${isPlayingAudio ? styles.waveBarActive : ''}`} />
-                    <div className={`${styles.waveBar} ${isPlayingAudio ? styles.waveBarActive : ''}`} />
-                    <div className={`${styles.waveBar} ${isPlayingAudio ? styles.waveBarActive : ''}`} />
-                    <div className={`${styles.waveBar} ${isPlayingAudio ? styles.waveBarActive : ''}`} />
+                    <div className={`${styles.waveBar} ${isAudioGenerating || isPlayingAudio ? styles.waveBarActive : ''}`} />
+                    <div className={`${styles.waveBar} ${isAudioGenerating || isPlayingAudio ? styles.waveBarActive : ''}`} />
+                    <div className={`${styles.waveBar} ${isAudioGenerating || isPlayingAudio ? styles.waveBarActive : ''}`} />
+                    <div className={`${styles.waveBar} ${isAudioGenerating || isPlayingAudio ? styles.waveBarActive : ''}`} />
+                    <div className={`${styles.waveBar} ${isAudioGenerating || isPlayingAudio ? styles.waveBarActive : ''}`} />
+                    <div className={`${styles.waveBar} ${isAudioGenerating || isPlayingAudio ? styles.waveBarActive : ''}`} />
                   </div>
                 </div>
 
@@ -557,6 +615,10 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                 <audio
                   ref={audioRef}
                   src={api.getAudioUrl(city, country)}
+                  preload="auto"
+                  onCanPlay={handleAudioCanPlay}
+                  onCanPlayThrough={handleAudioCanPlay}
+                  onLoadedData={handleAudioCanPlay}
                   onTimeUpdate={() => {
                     if (audioRef.current) {
                       setAudioCurrentTime(audioRef.current.currentTime);
@@ -564,42 +626,69 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                     }
                   }}
                   onEnded={() => setIsPlayingAudio(false)}
-                  onError={() => setIsPlayingAudio(false)}
+                  onError={() => {
+                    setIsPlayingAudio(false);
+                    setIsAudioGenerating(false);
+                  }}
                 />
 
-                {/* Player Bar */}
-                <div className={styles.audioPlayerBar}>
-                  <button
-                    type="button"
-                    className={styles.playPauseBtn}
-                    onClick={toggleAudio}
-                    aria-label={isPlayingAudio ? 'Pause Narration' : 'Play Narration'}
-                  >
-                    {isPlayingAudio ? <Pause size={18} /> : <Play size={18} style={{ marginLeft: 2 }} />}
-                  </button>
+                {/* Active Synthesis Animation or Player Bar */}
+                {isAudioGenerating ? (
+                  <div className={styles.audioGeneratingBox}>
+                    <div className={styles.audioGenHeader}>
+                      <span className={styles.audioGenTitle}>
+                        <Loader2 size={15} className="animate-spin" />
+                        <span>{audioStageText}</span>
+                      </span>
+                      <span className={styles.audioGenPercent}>{Math.round(audioProgress)}%</span>
+                    </div>
 
-                  <input
-                    type="range"
-                    min="0"
-                    max={audioDuration || 100}
-                    value={audioCurrentTime}
-                    onChange={handleAudioSeek}
-                    className={styles.seekSlider}
-                  />
+                    <div className={styles.audioGenProgressTrack}>
+                      <div
+                        className={styles.audioGenProgressFill}
+                        style={{ width: `${Math.min(audioProgress, 98)}%` }}
+                      />
+                    </div>
 
-                  <div className={styles.timeDisplay}>
-                    {formatTime(audioCurrentTime)} / {formatTime(audioDuration || 180)}
+                    <span className={styles.audioGenSubtext}>
+                      Google Cloud Voice & gTTS • Live bespoke narration synthesis
+                    </span>
                   </div>
+                ) : (
+                  /* Player Bar */
+                  <div className={styles.audioPlayerBar}>
+                    <button
+                      type="button"
+                      className={styles.playPauseBtn}
+                      onClick={toggleAudio}
+                      aria-label={isPlayingAudio ? 'Pause Narration' : 'Play Narration'}
+                    >
+                      {isPlayingAudio ? <Pause size={18} /> : <Play size={18} style={{ marginLeft: 2 }} />}
+                    </button>
 
-                  <a
-                    href={api.getAudioUrl(city, country)}
-                    download={`${city}_Audio_Guide.mp3`}
-                    className={styles.downloadAudioBtn}
-                  >
-                    <Download size={14} />
-                    <span>MP3</span>
-                  </a>
-                </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max={audioDuration || 100}
+                      value={audioCurrentTime}
+                      onChange={handleAudioSeek}
+                      className={styles.seekSlider}
+                    />
+
+                    <div className={styles.timeDisplay}>
+                      {formatTime(audioCurrentTime)} / {formatTime(audioDuration || 180)}
+                    </div>
+
+                    <a
+                      href={api.getAudioUrl(city, country)}
+                      download={`${city}_Audio_Guide.mp3`}
+                      className={styles.downloadAudioBtn}
+                    >
+                      <Download size={14} />
+                      <span>MP3</span>
+                    </a>
+                  </div>
+                )}
               </div>
 
               {/* Story Narrative Card */}
