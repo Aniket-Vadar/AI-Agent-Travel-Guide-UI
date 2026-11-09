@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Sparkles, Bot, User, Download, MapPin } from 'lucide-react';
+import { MessageSquare, X, Send, Sparkles, Bot, User, Download, MapPin, Lock } from 'lucide-react';
 import styles from './ChatbotDrawer.module.css';
 import { api, ChatResponse } from '@/services/api';
+import { useAuth } from '@/context/AuthContext';
 
 interface Message {
   role: 'assistant' | 'user';
@@ -34,6 +35,7 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
   onToggle,
   onToast,
 }) => {
+  const { user, openAuthModal } = useAuth();
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
@@ -56,6 +58,12 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
   const handleSend = async (messageText?: string) => {
     const textToSend = messageText || input;
     if (!textToSend.trim() || isLoading) return;
+
+    if (!user) {
+      openAuthModal('signup');
+      onToast('Account required: Please create a free account or sign in to chat with the AI concierge.', 'info');
+      return;
+    }
 
     const userMsg: Message = { role: 'user', text: textToSend };
     setMessages((prev) => [...prev, userMsg]);
@@ -106,6 +114,11 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
   };
 
   const handleDownloadCtaPdf = async (req: NonNullable<Message['ctaRequest']>) => {
+    if (!user) {
+      openAuthModal('signup');
+      onToast('Account required: Please create a free account or sign in to download custom guides.', 'info');
+      return;
+    }
     setDownloadingPdf(true);
     onToast(`Generating guide for ${req.city}... 📄`, 'info');
     try {
@@ -264,30 +277,68 @@ export const ChatbotDrawer: React.FC<ChatbotDrawerProps> = ({
         )}
 
         {/* Bottom Input Form */}
-        <form
-          className={styles.inputForm}
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSend();
-          }}
-        >
-          <input
-            type="text"
-            className={styles.chatInput}
-            placeholder="Ask about any city, packing tips, or travel plan..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            disabled={isLoading}
-          />
-          <button
-            type="submit"
-            className={styles.sendBtn}
-            disabled={!input.trim() || isLoading}
-            aria-label="Send message"
+        {!user ? (
+          <div style={{
+            padding: '16px',
+            background: '#F4F4F5',
+            borderTop: '1px solid #E4E4E7',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10,
+            alignItems: 'center',
+            textAlign: 'center',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.82rem', fontWeight: 600, color: '#18181B' }}>
+              <Lock size={14} />
+              <span>Sign in required to chat</span>
+            </div>
+            <p style={{ fontSize: '0.76rem', color: '#71717A', margin: 0 }}>
+              Create a free account or sign in to talk with your AI travel concierge.
+            </p>
+            <button
+              type="button"
+              onClick={() => openAuthModal('signup')}
+              style={{
+                width: '100%',
+                background: '#000000',
+                color: '#FFFFFF',
+                padding: '9px 16px',
+                borderRadius: '8px',
+                fontSize: '0.82rem',
+                fontWeight: 600,
+                border: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              Sign Up / Sign In Free
+            </button>
+          </div>
+        ) : (
+          <form
+            className={styles.inputForm}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSend();
+            }}
           >
-            <Send size={16} />
-          </button>
-        </form>
+            <input
+              type="text"
+              className={styles.chatInput}
+              placeholder="Ask about any city, packing tips, or travel plan..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              disabled={isLoading}
+            />
+            <button
+              type="submit"
+              className={styles.sendBtn}
+              disabled={!input.trim() || isLoading}
+              aria-label="Send message"
+            >
+              <Send size={16} />
+            </button>
+          </form>
+        )}
       </div>
     </>
   );

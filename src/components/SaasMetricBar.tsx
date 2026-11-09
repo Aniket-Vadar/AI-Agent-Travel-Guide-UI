@@ -52,3 +52,4 @@ export const SaasMetricBar: React.FC<SaasMetricBarProps> = ({ onOpenCommandPalet
     </div>
   );
 };
+

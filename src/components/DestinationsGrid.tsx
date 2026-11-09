@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import styles from './DestinationsGrid.module.css';
 import { Destination } from '@/services/api';
+import { useAuth } from '@/context/AuthContext';
 
 interface DestinationsGridProps {
   destinations: Destination[];
@@ -29,10 +30,30 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
   activeCategory = 'All',
   onSelectDestination,
   onPlanDestination,
+  onToast,
   loadingCity = null,
 }) => {
+  const { user, openAuthModal } = useAuth();
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [filterQuery, setFilterQuery] = useState('');
+
+  const handleActionSelect = (dest: Destination) => {
+    if (!user) {
+      openAuthModal('signup');
+      onToast?.('Account required: Please create a free account or sign in to listen to audio stories.', 'info');
+      return;
+    }
+    onSelectDestination(dest);
+  };
+
+  const handleActionPlan = (dest: Destination) => {
+    if (!user) {
+      openAuthModal('signup');
+      onToast?.('Account required: Please create a free account or sign in to compile itineraries & PDF guides.', 'info');
+      return;
+    }
+    onPlanDestination(dest);
+  };
 
   // Filter by category
   const categoryFiltered =
@@ -134,7 +155,7 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
                     <button
                       type="button"
                       className={styles.readBtn}
-                      onClick={() => onSelectDestination(dest)}
+                      onClick={() => handleActionSelect(dest)}
                       disabled={Boolean(loadingCity)}
                       title={`Listen to neural story audio for ${dest.city}`}
                     >
@@ -154,7 +175,7 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
                     <button
                       type="button"
                       className={styles.planCardBtn}
-                      onClick={() => onPlanDestination(dest)}
+                      onClick={() => handleActionPlan(dest)}
                       title={`Compile itinerary for ${dest.city}`}
                     >
                       <Calendar size={14} />
@@ -239,7 +260,7 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
                         <button
                           type="button"
                           className={styles.tableActionBtn}
-                          onClick={() => onSelectDestination(dest)}
+                          onClick={() => handleActionSelect(dest)}
                           disabled={Boolean(loadingCity)}
                         >
                           {loadingCity?.toLowerCase() === dest.city.toLowerCase() ? (
@@ -253,7 +274,7 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
                           type="button"
                           className={styles.tableActionBtn}
                           style={{ background: '#000000', color: '#FFFFFF', borderColor: '#000000' }}
-                          onClick={() => onPlanDestination(dest)}
+                          onClick={() => handleActionPlan(dest)}
                         >
                           <Calendar size={13} />
                           <span>Plan Trip</span>

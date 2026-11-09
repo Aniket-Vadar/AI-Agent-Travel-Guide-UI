@@ -85,6 +85,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   const handleSelectCity = (city: string, country: string, mode: 'story' | 'plan') => {
     onClose();
+    if (!user) {
+      openAuthModal('signup');
+      return;
+    }
     if (mode === 'story') {
       onSelectStory(city, country);
     } else {
@@ -120,6 +124,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                 className={styles.item}
                 onClick={() => {
                   onClose();
+                  if (!user) {
+                    openAuthModal('signup');
+                    return;
+                  }
                   onOpenChat();
                 }}
               >
@@ -140,6 +148,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                 className={styles.item}
                 onClick={() => {
                   onClose();
+                  if (!user) {
+                    openAuthModal('signup');
+                    return;
+                  }
                   onOpenPlan('Kyoto', 'Japan');
                 }}
               >
@@ -253,3 +265,4 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     </div>
   );
 };
+

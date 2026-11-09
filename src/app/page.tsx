@@ -18,8 +18,10 @@ import { AuthModal } from '@/components/AuthModal';
 import { StoryLoadingOverlay } from '@/components/StoryLoadingOverlay';
 import { ToastContainer, ToastItem } from '@/components/Toast';
 import { api, Destination, Story } from '@/services/api';
+import { useAuth } from '@/context/AuthContext';
 
 export default function HomePage() {
+  const { user, openAuthModal } = useAuth();
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [activeCategory, setActiveCategory] = useState('All');
   const [currentStory, setCurrentStory] = useState<Story | null>(null);
@@ -77,6 +79,12 @@ export default function HomePage() {
   const handleLoadStory = async (city: string, country = '') => {
     if (!city.trim()) return;
 
+    if (!user) {
+      openAuthModal('signup');
+      addToast('Account required: Please create a free account or sign in to generate cultural audio stories.', 'info');
+      return;
+    }
+
     setLoadingStoryCity(city);
     setStoryProgress(18);
     setStoryStage(`Curator Agent: Gathering cultural chronicles for ${city}...`);
@@ -115,12 +123,22 @@ export default function HomePage() {
 
   // Plan trip action: Opens the rich planner modal window
   const handlePlanDestination = (dest: Destination) => {
+    if (!user) {
+      openAuthModal('signup');
+      addToast('Account required: Please create a free account or sign in to compile itineraries & PDF guides.', 'info');
+      return;
+    }
     setPlanCity(dest.city);
     setPlanCountry(dest.country);
     setIsPlannerModalOpen(true);
   };
 
   const handleStoryPlan = (city: string, country?: string) => {
+    if (!user) {
+      openAuthModal('signup');
+      addToast('Account required: Please create a free account or sign in to compile itineraries & PDF guides.', 'info');
+      return;
+    }
     setPlanCity(city);
     if (country) setPlanCountry(country);
     setIsPlannerModalOpen(true);

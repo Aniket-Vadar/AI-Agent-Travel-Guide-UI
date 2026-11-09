@@ -5,6 +5,7 @@ import { Download, Sparkles, Loader2, CheckCircle2, Maximize2, Compass } from 'l
 import styles from './TripPlannerForm.module.css';
 import { api } from '@/services/api';
 import { lookupCityCountrySync, resolveCityCountry } from '@/utils/cityCountryMap';
+import { useAuth } from '@/context/AuthContext';
 
 interface TripPlannerFormProps {
   initialCity?: string;
@@ -38,6 +39,7 @@ export const TripPlannerForm: React.FC<TripPlannerFormProps> = ({
   onToast,
   onOpenModal,
 }) => {
+  const { user, openAuthModal } = useAuth();
   const [city, setCity] = useState(initialCity);
   const [country, setCountry] = useState(initialCountry);
   const [days, setDays] = useState(initialDays);
@@ -89,6 +91,12 @@ export const TripPlannerForm: React.FC<TripPlannerFormProps> = ({
     e.preventDefault();
     if (!city.trim()) {
       onToast('Please enter a destination city', 'error');
+      return;
+    }
+
+    if (!user) {
+      openAuthModal('signup');
+      onToast('Account required: Please create a free account or sign in to compile your travel dossier.', 'info');
       return;
     }
 
@@ -297,7 +305,14 @@ export const TripPlannerForm: React.FC<TripPlannerFormProps> = ({
                 <button
                   type="button"
                   className={styles.openWindowBtn}
-                  onClick={onOpenModal}
+                  onClick={() => {
+                    if (!user) {
+                      openAuthModal('signup');
+                      onToast('Account required: Please create a free account or sign in to open the interactive studio.', 'info');
+                      return;
+                    }
+                    onOpenModal();
+                  }}
                 >
                   <Maximize2 size={16} />
                   <span>Open Interactive Window & Audio Book</span>

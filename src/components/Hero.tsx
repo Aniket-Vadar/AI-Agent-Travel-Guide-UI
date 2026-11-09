@@ -14,6 +14,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import styles from './Hero.module.css';
+import { useAuth } from '@/context/AuthContext';
 
 interface HeroProps {
   onSearch: (city: string, country?: string) => void;
@@ -46,6 +47,7 @@ export const Hero: React.FC<HeroProps> = ({
   onSelectStory,
   isLoadingStory = false,
 }) => {
+  const { user, openAuthModal } = useAuth();
   const [city, setCity] = useState('Pune');
   const [country, setCountry] = useState('India');
   const [days, setDays] = useState(5);
@@ -74,6 +76,12 @@ export const Hero: React.FC<HeroProps> = ({
   const handlePlan = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!city.trim()) return;
+
+    if (!user) {
+      openAuthModal('signup');
+      return;
+    }
+
     setIsOpeningPlan(true);
     onExplorePlan(city, country, days, vibe);
     setTimeout(() => setIsOpeningPlan(false), 500);
@@ -81,6 +89,12 @@ export const Hero: React.FC<HeroProps> = ({
 
   const handleStory = () => {
     if (!city.trim()) return;
+
+    if (!user) {
+      openAuthModal('signup');
+      return;
+    }
+
     onSelectStory(city, country);
   };
 

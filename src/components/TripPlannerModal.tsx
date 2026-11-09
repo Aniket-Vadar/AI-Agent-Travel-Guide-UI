@@ -22,6 +22,7 @@ import {
 import styles from './TripPlannerModal.module.css';
 import { api, Story } from '@/services/api';
 import { lookupCityCountrySync, resolveCityCountry } from '@/utils/cityCountryMap';
+import { useAuth } from '@/context/AuthContext';
 
 interface TripPlannerModalProps {
   isOpen: boolean;
@@ -51,6 +52,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
   initialDays = 5,
   onToast,
 }) => {
+  const { user, openAuthModal } = useAuth();
   const [activeTab, setActiveTab] = useState<'itinerary' | 'audio'>('itinerary');
   const [city, setCity] = useState(initialCity);
   const [country, setCountry] = useState(initialCountry);
@@ -198,6 +200,13 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
     e.preventDefault();
     if (!city.trim()) {
       onToast('Please enter a destination city', 'error');
+      return;
+    }
+
+    if (!user) {
+      onClose();
+      openAuthModal('signup');
+      onToast('Account required: Please create a free account or sign in to compile itineraries & PDF dossiers.', 'info');
       return;
     }
 

@@ -308,12 +308,14 @@ export const api = {
   },
 
   async getStory(city: string, country = ''): Promise<{ story: Story; cached: boolean }> {
+    const authHeaders = await getAuthHeaders();
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 4500);
 
     try {
       const params = new URLSearchParams({ country });
       const res = await fetch(`${API_BASE}/stories/${encodeURIComponent(city)}?${params}`, {
+        headers: { ...authHeaders },
         signal: controller.signal,
       });
       clearTimeout(timeoutId);
@@ -370,9 +372,31 @@ export const api = {
     };
   },
 
-  getAudioUrl(city: string, country = ''): string {
+  getAudioUrl(city: string, country = '', token?: string): string {
     const params = new URLSearchParams({ country });
-    return `${API_BASE}/stories/${encodeURIComponent(city)}/audio?${params}`;
+    if (token) {
+      params.set('token', token);
+    } else {
+      try {
+        if (typeof window !== 'undefined') {
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && (key.startsWith('sb-') || key.includes('supabase.auth.token')) && key.endsWith('-auth-token')) {
+              const raw = localStorage.getItem(key);
+              if (raw) {
+                const parsed = JSON.parse(raw);
+                const t = parsed?.access_token || parsed?.currentSession?.access_token;
+                if (t) {
+                  params.set('token', t);
+                  break;
+                }
+              }
+            }
+          }
+        }
+      } catch {}
+    }
+    return `${API_BASE}/stories/${encodeURIComponent(city)}/audio?${params.toString()}`;
   },
 
   async generatePDF(city: string, country: string, days: number, preferences: string): Promise<Blob> {
