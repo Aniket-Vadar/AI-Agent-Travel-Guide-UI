@@ -12,6 +12,7 @@ import { TripPlannerModal } from '@/components/TripPlannerModal';
 import { StoryView } from '@/components/StoryView';
 import { ChatbotDrawer } from '@/components/ChatbotDrawer';
 import { Footer } from '@/components/Footer';
+import { AuthModal } from '@/components/AuthModal';
 import { ToastContainer, ToastItem } from '@/components/Toast';
 import { api, Destination, Story } from '@/services/api';
 
@@ -167,6 +168,9 @@ export default function HomePage() {
 
       {/* Clean Minimal Footer */}
       <Footer />
+
+      {/* Supabase Authentication Modal */}
+      <AuthModal />
 
       {/* Notifications */}
       <ToastContainer toasts={toasts} onDismiss={removeToast} />

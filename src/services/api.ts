@@ -267,10 +267,27 @@ const FALLBACK_STORIES: Record<string, Story> = {
   },
 };
 
+import { supabase } from './supabase';
+
+async function getAuthHeaders(): Promise<Record<string, string>> {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.access_token) {
+      return { Authorization: `Bearer ${session.access_token}` };
+    }
+  } catch {
+    // fallback
+  }
+  return {};
+}
+
 export const api = {
   async getPopularDestinations(): Promise<Destination[]> {
     try {
-      const res = await fetch(`${API_BASE}/stories/popular`);
+      const authHeaders = await getAuthHeaders();
+      const res = await fetch(`${API_BASE}/stories/popular`, {
+        headers: { ...authHeaders },
+      });
       if (!res.ok) throw new Error('Failed to fetch destinations');
       const data = await res.json();
       if (Array.isArray(data.destinations) && data.destinations.length > 0) {
@@ -351,9 +368,10 @@ export const api = {
   },
 
   async generatePDF(city: string, country: string, days: number, preferences: string): Promise<Blob> {
+    const authHeaders = await getAuthHeaders();
     const res = await fetch(`${API_BASE}/guide/pdf`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...authHeaders },
       body: JSON.stringify({ city, country, days, preferences }),
     });
 
@@ -375,9 +393,10 @@ export const api = {
       if (sessionId) body.session_id = sessionId;
       if (history.length) body.history = history;
 
+      const authHeaders = await getAuthHeaders();
       const res = await fetch(`${API_BASE}/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeaders },
         body: JSON.stringify(body),
       });
       if (res.ok) {
