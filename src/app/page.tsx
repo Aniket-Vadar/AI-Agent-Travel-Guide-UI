@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { Preloader } from '@/components/Preloader';
 import { Navbar } from '@/components/Navbar';
+import { SaasMetricBar } from '@/components/SaasMetricBar';
+import { CommandPalette } from '@/components/CommandPalette';
 import { Hero } from '@/components/Hero';
 import { CategoryStrip } from '@/components/CategoryStrip';
 import { DestinationsGrid } from '@/components/DestinationsGrid';
@@ -35,6 +37,7 @@ export default function HomePage() {
   // UI modal states
   const [isPlannerModalOpen, setIsPlannerModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
   const addToast = (message: string, type: 'info' | 'success' | 'error' = 'info') => {
@@ -56,6 +59,18 @@ export default function HomePage() {
     }).catch(() => {
       // Handled in api.ts fallback
     });
+  }, []);
+
+  // Global shortcut for Command Palette (Cmd+K / Ctrl+K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   // Fetch story & audio with responsive multi-stage loading animation
@@ -116,7 +131,7 @@ export default function HomePage() {
       {/* Fast Preloader */}
       <Preloader />
 
-      {/* Clean Monochrome Navigation */}
+      {/* Clean Monochrome SaaS Navigation */}
       <Navbar
         onOpenChat={() => setIsChatOpen(true)}
         onNavigatePlan={() => {
@@ -127,7 +142,11 @@ export default function HomePage() {
           const el = document.getElementById('destinations');
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
+        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
       />
+
+      {/* SaaS Live Metric & Status Bar */}
+      <SaasMetricBar onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
 
       <main style={{ flex: 1 }}>
         {currentStory ? (
@@ -142,7 +161,7 @@ export default function HomePage() {
           />
         ) : (
           <>
-            {/* 1. Clear, Focused Hero */}
+            {/* 1. SaaS Parameter Studio Hero Console */}
             <Hero
               onSearch={(city, country) => handleLoadStory(city, country)}
               onExplorePlan={(city, country, days) => {
@@ -161,7 +180,7 @@ export default function HomePage() {
               onSelectCategory={(cat) => setActiveCategory(cat)}
             />
 
-            {/* 3. Curated Destinations Grid */}
+            {/* 3. SaaS Curated Destinations Directory (Grid & Table View) */}
             <DestinationsGrid
               destinations={destinations}
               activeCategory={activeCategory}
@@ -171,7 +190,7 @@ export default function HomePage() {
               loadingCity={loadingStoryCity}
             />
 
-            {/* 4. How It Works: 3 Steps */}
+            {/* 4. Multi-Agent Architecture */}
             <HowItWorks />
 
             {/* 5. Custom Trip Planner Form */}
@@ -201,6 +220,19 @@ export default function HomePage() {
         isOpen={isChatOpen}
         onToggle={() => setIsChatOpen(!isChatOpen)}
         onToast={addToast}
+      />
+
+      {/* SaaS Command Palette (⌘K) */}
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onSelectStory={(city, country) => handleLoadStory(city, country)}
+        onOpenPlan={(city, country) => {
+          setPlanCity(city);
+          if (country) setPlanCountry(country);
+          setIsPlannerModalOpen(true);
+        }}
+        onOpenChat={() => setIsChatOpen(true)}
       />
 
       {/* Clean Minimal Footer */}

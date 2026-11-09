@@ -1,12 +1,14 @@
 .hero {
   position: relative;
   background: #FFFFFF;
-  padding: 130px 24px 70px;
+  padding: 120px 24px 70px;
   border-bottom: 1px solid #E4E4E7;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 .heroContainer {
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
   text-align: center;
   display: flex;
@@ -18,151 +20,287 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  background: #F4F4F5;
+  background: #FFFFFF;
   color: #09090B;
   border: 1px solid #E4E4E7;
-  padding: 6px 14px;
+  padding: 5px 14px;
   border-radius: 9999px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.pulseDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+  animation: pulse 1.8s infinite;
 }
 
 .title {
-  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-size: clamp(2.3rem, 5.2vw, 3.8rem);
   font-weight: 800;
   color: #000000;
   letter-spacing: -0.04em;
-  line-height: 1.1;
-  margin-bottom: 18px;
+  line-height: 1.08;
+  margin-bottom: 16px;
 }
 
 .subtitle {
-  font-size: 1.12rem;
+  font-size: 1.05rem;
   color: #52525B;
-  max-width: 660px;
-  margin: 0 auto 36px;
+  max-width: 700px;
+  margin: 0 auto 32px;
   line-height: 1.6;
 }
 
-/* Search Box */
-.searchBox {
+/* SaaS Parameter Studio Console */
+.studioConsole {
   width: 100%;
-  max-width: 680px;
+  max-width: 820px;
   background: #FFFFFF;
-  border: 1px solid #000000;
-  border-radius: 12px;
-  padding: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid #E4E4E7;
+  border-radius: 16px;
+  box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.08);
+  padding: 22px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 18px;
   margin-bottom: 24px;
+  text-align: left;
 }
 
-.searchInputRow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 12px;
-}
-
-.searchIcon {
-  color: #71717A;
-  flex-shrink: 0;
-}
-
-.searchInput {
-  flex: 1;
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  color: #000000;
-  background: transparent;
-}
-
-.searchInput::placeholder {
-  color: #A1A1AA;
-}
-
-.searchActions {
+.consoleHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid #F4F4F5;
-  padding-top: 8px;
-  padding-left: 12px;
-  padding-right: 4px;
-  gap: 12px;
+  border-bottom: 1px solid #F4F4F5;
+  padding-bottom: 12px;
 }
 
-.daysSelect {
+.consoleTabs {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.85rem;
-  color: #52525B;
 }
 
-.selectInput {
-  border: 1px solid #E4E4E7;
+.consoleTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #71717A;
+  background: transparent;
+  border: none;
+  padding: 4px 10px;
   border-radius: 6px;
-  padding: 5px 8px;
-  font-size: 0.82rem;
-  font-weight: 500;
-  background: #FFFFFF;
-  color: #000000;
   cursor: pointer;
-  outline: none;
+  transition: all 0.15s ease;
 }
 
-.btnGroup {
+.consoleTabActive {
+  background: #F4F4F5;
+  color: #000000;
+}
+
+.engineIndicator {
+  font-size: 0.72rem;
+  color: #059669;
+  font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
 }
 
-.storyBtn {
+/* Input Fields Grid */
+.inputsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.fieldWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #27272A;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.countryPill {
+  font-size: 0.7rem;
+  color: #059669;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.searchBoxWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  color: #71717A;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px 14px 10px 38px;
+  border: 1px solid #E4E4E7;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #000000;
+  background: #FAFAFA;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.searchInput:focus {
+  background: #FFFFFF;
+  border-color: #000000;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Duration Segmented Bar */
+.durationBar {
+  display: flex;
+  align-items: center;
+  background: #FAFAFA;
+  border: 1px solid #E4E4E7;
+  border-radius: 8px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.durationPill {
+  flex: 1;
+  padding: 7px 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #52525B;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.durationPillActive {
+  background: #000000;
+  color: #FFFFFF;
+}
+
+/* Vibe Selector */
+.vibeRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vibeList {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.vibeBtn {
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid #E4E4E7;
+  background: #FFFFFF;
+  color: #52525B;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.vibeBtn:hover {
+  border-color: #000000;
+  color: #000000;
+}
+
+.vibeBtnActive {
+  background: #000000;
+  color: #FFFFFF;
+  border-color: #000000;
+  font-weight: 600;
+}
+
+/* Console Actions Bar */
+.actionRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid #F4F4F5;
+  padding-top: 14px;
+}
+
+.voiceBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   background: #FFFFFF;
   color: #000000;
   border: 1px solid #E4E4E7;
-  padding: 9px 16px;
-  font-size: 0.84rem;
+  padding: 10px 18px;
+  font-size: 0.86rem;
   font-weight: 600;
   border-radius: 8px;
+  cursor: pointer;
   transition: all 0.15s ease;
-  white-space: nowrap;
 }
 
-.storyBtn:hover {
+.voiceBtn:hover {
   background: #F4F4F5;
   border-color: #000000;
 }
 
 .planBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   background: #000000;
   color: #FFFFFF;
   border: 1px solid #000000;
-  padding: 9px 18px;
-  font-size: 0.84rem;
-  font-weight: 600;
+  padding: 10px 22px;
+  font-size: 0.88rem;
+  font-weight: 700;
   border-radius: 8px;
+  cursor: pointer;
   transition: all 0.15s ease;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .planBtn:hover {
   background: #27272A;
-  border-color: #27272A;
+  transform: translateY(-1px);
 }
 
-/* Quick Tags */
-.quickTags {
+/* Presets List */
+.presetsBar {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -170,43 +308,44 @@
   gap: 8px;
 }
 
-.tagLabel {
-  font-size: 0.8rem;
+.presetLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
   color: #71717A;
-  margin-right: 4px;
 }
 
-.tagBtn {
-  background: #F4F4F5;
+.presetBtn {
+  background: #FFFFFF;
   color: #18181B;
   border: 1px solid #E4E4E7;
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.78rem;
+  font-weight: 600;
   padding: 4px 12px;
   border-radius: 9999px;
+  cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.tagBtn:hover {
+.presetBtn:hover {
   background: #000000;
   color: #FFFFFF;
   border-color: #000000;
 }
 
-@media (max-width: 640px) {
-  .hero {
-    padding: 100px 16px 50px;
+@keyframes pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@media (max-width: 720px) {
+  .inputsGrid {
+    grid-template-columns: 1fr;
   }
-  .searchActions {
+  .actionRow {
     flex-direction: column;
     align-items: stretch;
   }
-  .btnGroup {
-    width: 100%;
-  }
-  .storyBtn, .planBtn {
-    flex: 1;
-    text-align: center;
+  .voiceBtn, .planBtn {
     justify-content: center;
   }
 }

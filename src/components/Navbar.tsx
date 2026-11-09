@@ -1,7 +1,16 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Sparkles, Compass, User as UserIcon, LogOut, ChevronDown, Calendar } from 'lucide-react';
+import {
+  Sparkles,
+  Compass,
+  User as UserIcon,
+  LogOut,
+  ChevronDown,
+  Calendar,
+  Search,
+  Plus,
+} from 'lucide-react';
 import styles from './Navbar.module.css';
 import { useAuth } from '@/context/AuthContext';
 
@@ -9,9 +18,15 @@ interface NavbarProps {
   onOpenChat: () => void;
   onNavigatePlan: () => void;
   onNavigateStories: () => void;
+  onOpenCommandPalette?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenChat, onNavigatePlan, onNavigateStories }) => {
+export const Navbar: React.FC<NavbarProps> = ({
+  onOpenChat,
+  onNavigatePlan,
+  onNavigateStories,
+  onOpenCommandPalette,
+}) => {
   const { user, openAuthModal, signOut } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -40,10 +55,24 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenChat, onNavigatePlan, onNa
         {/* Brand */}
         <a href="#top" className={styles.brand}>
           <span className={styles.brandName}>WAYFARER</span>
-          <span className={styles.brandBadge}>AI</span>
+          <span className={styles.brandBadge}>STUDIO</span>
         </a>
 
-        {/* Center Navigation */}
+        {/* Center SaaS Command Search Bar */}
+        {onOpenCommandPalette && (
+          <button
+            type="button"
+            className={styles.commandBarTrigger}
+            onClick={onOpenCommandPalette}
+            aria-label="Search destinations and commands"
+          >
+            <Search size={14} />
+            <span>Search destinations, stories, guides...</span>
+            <span className={styles.kbdShortcut}>⌘K</span>
+          </button>
+        )}
+
+        {/* Center Navigation Links (desktop) */}
         <nav className={styles.navLinks}>
           <a
             href="#destinations"
@@ -53,7 +82,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenChat, onNavigatePlan, onNa
               onNavigateStories();
             }}
           >
-            Destinations
+            Directory
           </a>
           <a
             href="#how-it-works"
@@ -63,26 +92,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenChat, onNavigatePlan, onNa
               document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
             }}
           >
-            How It Works
-          </a>
-          <a
-            href="#plan-trip"
-            className={styles.navLink}
-            onClick={(e) => {
-              e.preventDefault();
-              onNavigatePlan();
-            }}
-          >
-            Trip Planner
+            Architecture
           </a>
         </nav>
 
-        {/* Right Action */}
+        {/* Right Action Group */}
         <div className={styles.rightGroup}>
-          <div className={styles.statusPill}>
-            <span className={styles.statusDot} />
-            <span>Concierge Active</span>
-          </div>
+          <button
+            type="button"
+            className={styles.newDossierBtn}
+            onClick={onNavigatePlan}
+          >
+            <Plus size={14} />
+            <span>New Dossier</span>
+          </button>
 
           <button
             type="button"
