@@ -12,7 +12,7 @@ interface TripPlannerFormProps {
   initialCountry?: string;
   initialDays?: number;
   onToast: (msg: string, type?: 'info' | 'success' | 'error') => void;
-  onOpenModal?: () => void;
+  onOpenModal?: (city?: string, country?: string, days?: number) => void;
 }
 
 const VIBES = [
@@ -311,7 +311,7 @@ export const TripPlannerForm: React.FC<TripPlannerFormProps> = ({
                       onToast('Account required: Please create a free account or sign in to open the interactive studio.', 'info');
                       return;
                     }
-                    onOpenModal();
+                    onOpenModal(city, country, days);
                   }}
                 >
                   <Maximize2 size={16} />

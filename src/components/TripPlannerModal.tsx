@@ -90,9 +90,9 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Sync initial props
+  // Sync initial props only when modal opens or initialCity changes from outside
   useEffect(() => {
-    if (initialCity) {
+    if (isOpen && initialCity) {
       setCity(initialCity);
       const match = lookupCityCountrySync(initialCity);
       if (match) {
@@ -102,8 +102,8 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
         setCountry(initialCountry);
       }
     }
-    if (initialDays) setDays(initialDays);
-  }, [initialCity, initialCountry, initialDays, isOpen]);
+    if (isOpen && initialDays) setDays(initialDays);
+  }, [isOpen, initialCity]);
 
   // Auto-detect country when typing city
   const handleCityChange = (newCity: string) => {
@@ -599,6 +599,63 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
           ) : (
             /* TAB 2: AUDIO BOOK & CULTURAL STORY */
             <div className={styles.audioTabContainer}>
+              {/* Destination Selector Bar for Audio */}
+              <div style={{
+                display: 'flex',
+                gap: 10,
+                alignItems: 'center',
+                marginBottom: 16,
+                background: '#FAFAFA',
+                padding: '8px 14px',
+                borderRadius: '10px',
+                border: '1px solid #E4E4E7'
+              }}>
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <MapPin size={16} style={{ color: '#71717A', flexShrink: 0 }} />
+                  <input
+                    type="text"
+                    value={city}
+                    onChange={(e) => handleCityChange(e.target.value)}
+                    placeholder="Enter destination for audio guide (e.g. Sangli, Kyoto)..."
+                    style={{
+                      width: '100%',
+                      background: 'transparent',
+                      border: 'none',
+                      outline: 'none',
+                      fontSize: '0.9rem',
+                      fontWeight: 600,
+                      color: '#000000',
+                    }}
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    loadStoryForCurrentCity();
+                    setAudioKey((k) => k + 1);
+                    setAutoPlayAudioRequested(true);
+                    setIsAudioGenerating(true);
+                  }}
+                  style={{
+                    background: '#000000',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    padding: '7px 14px',
+                    borderRadius: '7px',
+                    fontSize: '0.8rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    flexShrink: 0,
+                  }}
+                >
+                  <Headphones size={13} />
+                  <span>Synthesize & Play</span>
+                </button>
+              </div>
+
               <div className={styles.audioHeroCard}>
                 <div className={styles.audioHeroTop}>
                   <div>

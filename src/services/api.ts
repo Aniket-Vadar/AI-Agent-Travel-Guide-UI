@@ -310,7 +310,7 @@ export const api = {
   async getStory(city: string, country = ''): Promise<{ story: Story; cached: boolean }> {
     const authHeaders = await getAuthHeaders();
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4500);
+    const timeoutId = setTimeout(() => controller.abort(), 20000);
 
     try {
       const params = new URLSearchParams({ country });

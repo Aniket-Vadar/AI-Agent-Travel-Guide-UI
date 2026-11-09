@@ -217,7 +217,12 @@ export default function HomePage() {
               initialCountry={planCountry}
               initialDays={planDays}
               onToast={addToast}
-              onOpenModal={() => setIsPlannerModalOpen(true)}
+              onOpenModal={(c, co, d) => {
+                if (c) setPlanCity(c);
+                if (co) setPlanCountry(co);
+                if (d) setPlanDays(d);
+                setIsPlannerModalOpen(true);
+              }}
             />
           </>
         )}
