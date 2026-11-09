@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { BookOpen, Calendar, ArrowRight } from 'lucide-react';
+import { BookOpen, Calendar, ArrowRight, Loader2 } from 'lucide-react';
 import styles from './DestinationsGrid.module.css';
 import { Destination } from '@/services/api';
 
@@ -11,6 +11,7 @@ interface DestinationsGridProps {
   onSelectDestination: (dest: Destination) => void;
   onPlanDestination: (dest: Destination) => void;
   onToast?: (msg: string, type?: 'info' | 'success' | 'error') => void;
+  loadingCity?: string | null;
 }
 
 export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
@@ -18,6 +19,7 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
   activeCategory = 'All',
   onSelectDestination,
   onPlanDestination,
+  loadingCity = null,
 }) => {
   const filtered = activeCategory === 'All'
     ? destinations
@@ -71,9 +73,19 @@ export const DestinationsGrid: React.FC<DestinationsGridProps> = ({
                     type="button"
                     className={styles.readBtn}
                     onClick={() => onSelectDestination(dest)}
+                    disabled={Boolean(loadingCity)}
                   >
-                    <BookOpen size={14} />
-                    <span>Story & Audio</span>
+                    {loadingCity?.toLowerCase() === dest.city.toLowerCase() ? (
+                      <>
+                        <Loader2 size={14} className="animate-spin" />
+                        <span>Loading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <BookOpen size={14} />
+                        <span>Story & Audio</span>
+                      </>
+                    )}
                   </button>
 
                   <button

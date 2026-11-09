@@ -13,6 +13,7 @@ import { StoryView } from '@/components/StoryView';
 import { ChatbotDrawer } from '@/components/ChatbotDrawer';
 import { Footer } from '@/components/Footer';
 import { AuthModal } from '@/components/AuthModal';
+import { StoryLoadingOverlay } from '@/components/StoryLoadingOverlay';
 import { ToastContainer, ToastItem } from '@/components/Toast';
 import { api, Destination, Story } from '@/services/api';
 
@@ -25,6 +26,11 @@ export default function HomePage() {
   const [planCity, setPlanCity] = useState('Pune');
   const [planCountry, setPlanCountry] = useState('India');
   const [planDays, setPlanDays] = useState(5);
+
+  // Story loading animation state
+  const [loadingStoryCity, setLoadingStoryCity] = useState<string | null>(null);
+  const [storyProgress, setStoryProgress] = useState(15);
+  const [storyStage, setStoryStage] = useState('Curator Agent: Gathering authentic heritage spots & hidden chronicles...');
 
   // UI modal states
   const [isPlannerModalOpen, setIsPlannerModalOpen] = useState(false);
@@ -52,13 +58,42 @@ export default function HomePage() {
     });
   }, []);
 
-  // Fetch story & audio
+  // Fetch story & audio with responsive multi-stage loading animation
   const handleLoadStory = async (city: string, country = '') => {
+    if (!city.trim()) return;
+
+    setLoadingStoryCity(city);
+    setStoryProgress(18);
+    setStoryStage(`Curator Agent: Gathering cultural chronicles for ${city}...`);
+
+    const pInterval = setInterval(() => {
+      setStoryProgress((prev) => {
+        if (prev < 40) {
+          setStoryStage(`Curator Agent: Compiling historical landmarks & hidden gems...`);
+          return prev + 6;
+        } else if (prev < 75) {
+          setStoryStage(`Audio Atelier: Synthesizing studio voice narrative...`);
+          return prev + 3;
+        } else if (prev < 94) {
+          setStoryStage(`PDF Atelier: Preparing typography & high-definition dossier...`);
+          return prev + 1.2;
+        }
+        return prev;
+      });
+    }, 280);
+
     try {
-      addToast(`Loading cultural story for ${city}...`, 'info');
       const data = await api.getStory(city, country);
-      setCurrentStory(data.story);
+      setStoryProgress(100);
+      clearInterval(pInterval);
+      setTimeout(() => {
+        setCurrentStory(data.story);
+        setLoadingStoryCity(null);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 350);
     } catch (err: any) {
+      clearInterval(pInterval);
+      setLoadingStoryCity(null);
       addToast(err.message || 'Failed to load destination narrative', 'error');
     }
   };
@@ -117,6 +152,7 @@ export default function HomePage() {
                 setIsPlannerModalOpen(true);
               }}
               onSelectStory={(city, country) => handleLoadStory(city, country)}
+              isLoadingStory={Boolean(loadingStoryCity)}
             />
 
             {/* 2. Category Filter */}
@@ -132,6 +168,7 @@ export default function HomePage() {
               onSelectDestination={(dest) => handleLoadStory(dest.city, dest.country)}
               onPlanDestination={handlePlanDestination}
               onToast={addToast}
+              loadingCity={loadingStoryCity}
             />
 
             {/* 4. How It Works: 3 Steps */}
@@ -171,6 +208,15 @@ export default function HomePage() {
 
       {/* Supabase Authentication Modal */}
       <AuthModal />
+
+      {/* Fullscreen Animated Story Loading Overlay */}
+      {loadingStoryCity && (
+        <StoryLoadingOverlay
+          city={loadingStoryCity}
+          stage={storyStage}
+          progress={storyProgress}
+        />
+      )}
 
       {/* Notifications */}
       <ToastContainer toasts={toasts} onDismiss={removeToast} />

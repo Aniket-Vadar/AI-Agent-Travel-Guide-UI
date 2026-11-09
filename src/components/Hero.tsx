@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search, ArrowRight, Sparkles, BookOpen, Calendar } from 'lucide-react';
+import { Search, ArrowRight, Sparkles, BookOpen, Calendar, Loader2 } from 'lucide-react';
 import styles from './Hero.module.css';
 
 interface HeroProps {
   onSearch: (city: string, country?: string) => void;
   onExplorePlan: (city: string, country?: string, days?: number) => void;
   onSelectStory: (city: string, country?: string) => void;
+  isLoadingStory?: boolean;
 }
 
 const POPULAR_CITIES = [
@@ -20,9 +21,15 @@ const POPULAR_CITIES = [
   { city: 'Pune', country: 'India' },
 ];
 
-export const Hero: React.FC<HeroProps> = ({ onSearch, onExplorePlan, onSelectStory }) => {
+export const Hero: React.FC<HeroProps> = ({
+  onSearch,
+  onExplorePlan,
+  onSelectStory,
+  isLoadingStory = false,
+}) => {
   const [query, setQuery] = useState('');
   const [days, setDays] = useState(5);
+  const [isOpeningPlan, setIsOpeningPlan] = useState(false);
 
   const parseQuery = (str: string) => {
     const parts = str.split(',').map((p) => p.trim());
@@ -35,8 +42,10 @@ export const Hero: React.FC<HeroProps> = ({ onSearch, onExplorePlan, onSelectSto
   const handlePlan = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!query.trim()) return;
+    setIsOpeningPlan(true);
     const { city, country } = parseQuery(query);
     onExplorePlan(city, country, days);
+    setTimeout(() => setIsOpeningPlan(false), 600);
   };
 
   const handleStory = () => {
@@ -104,18 +113,36 @@ export const Hero: React.FC<HeroProps> = ({ onSearch, onExplorePlan, onSelectSto
                 type="button"
                 className={styles.storyBtn}
                 onClick={handleStory}
-                disabled={!query.trim()}
+                disabled={!query.trim() || isLoadingStory}
               >
-                <BookOpen size={14} style={{ display: 'inline', marginRight: '6px' }} />
-                Read Story
+                {isLoadingStory ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" style={{ display: 'inline', marginRight: '6px' }} />
+                    Loading Story...
+                  </>
+                ) : (
+                  <>
+                    <BookOpen size={14} style={{ display: 'inline', marginRight: '6px' }} />
+                    Read Story
+                  </>
+                )}
               </button>
               <button
                 type="submit"
                 className={styles.planBtn}
                 disabled={!query.trim()}
               >
-                <span>Plan Itinerary</span>
-                <ArrowRight size={14} />
+                {isOpeningPlan ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    <span>Opening Planner...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Plan Itinerary</span>
+                    <ArrowRight size={14} />
+                  </>
+                )}
               </button>
             </div>
           </div>

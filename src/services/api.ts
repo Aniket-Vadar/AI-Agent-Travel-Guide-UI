@@ -308,14 +308,22 @@ export const api = {
   },
 
   async getStory(city: string, country = ''): Promise<{ story: Story; cached: boolean }> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4500);
+
     try {
       const params = new URLSearchParams({ country });
-      const res = await fetch(`${API_BASE}/stories/${encodeURIComponent(city)}?${params}`);
+      const res = await fetch(`${API_BASE}/stories/${encodeURIComponent(city)}?${params}`, {
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
       if (res.ok) {
         return await res.json();
       }
     } catch {
-      // Backend fallback
+      // Fallback cleanly on network timeout / backend delay so user is never blocked
+    } finally {
+      clearTimeout(timeoutId);
     }
 
     // Match fallback story
