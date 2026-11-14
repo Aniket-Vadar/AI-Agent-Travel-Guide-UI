@@ -232,6 +232,7 @@ export default function HomePage() {
       <TripPlannerModal
         isOpen={isPlannerModalOpen}
         onClose={() => setIsPlannerModalOpen(false)}
+        onOpen={() => setIsPlannerModalOpen(true)}
         initialCity={planCity}
         initialCountry={planCountry}
         initialDays={planDays}

@@ -23,10 +23,12 @@ import styles from './TripPlannerModal.module.css';
 import { api, Story } from '@/services/api';
 import { lookupCityCountrySync, resolveCityCountry } from '@/utils/cityCountryMap';
 import { useAuth } from '@/context/AuthContext';
+import { GenerationProgressDock } from './GenerationProgressDock';
 
 interface TripPlannerModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpen?: () => void;
   initialCity?: string;
   initialCountry?: string;
   initialDays?: number;
@@ -47,6 +49,7 @@ const DURATION_PILLS = [2, 3, 4, 5, 7, 10];
 export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
   isOpen,
   onClose,
+  onOpen,
   initialCity = 'Pune',
   initialCountry = 'India',
   initialDays = 5,
@@ -65,6 +68,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
   const [progress, setProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
   const [generatedPdfBlob, setGeneratedPdfBlob] = useState<Blob | null>(null);
+  const [dismissedDock, setDismissedDock] = useState(false);
 
   // Audio Book & Story state
   const [story, setStory] = useState<Story | null>(null);
@@ -214,6 +218,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
     setProgress(10);
     setCurrentStep(0);
     setGeneratedPdfBlob(null);
+    setDismissedDock(false);
 
     // Progress animation intervals (continuous animation while still generating)
     const pInterval = setInterval(() => {
@@ -314,7 +319,32 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
     return `${m}:${s < 10 ? '0' : ''}${s}`;
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    if (isGenerating || (progress === 100 && generatedPdfBlob && !dismissedDock)) {
+      return (
+        <GenerationProgressDock
+          city={city}
+          country={country}
+          days={days}
+          progress={progress}
+          currentStep={currentStep}
+          isComplete={progress === 100}
+          pdfBlob={generatedPdfBlob}
+          onExpand={() => {
+            if (onOpen) onOpen();
+          }}
+          onDismiss={() => {
+            setDismissedDock(true);
+            if (progress === 100) {
+              setIsGenerating(false);
+            }
+          }}
+          onDownloadAgain={handleDownloadAgain}
+        />
+      );
+    }
+    return null;
+  }
 
   return (
     <div className={styles.overlay} onClick={onClose}>
@@ -344,6 +374,9 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
           >
             <FileText size={16} />
             <span>Itinerary & PDF Dossier</span>
+            {isGenerating && (
+              <span className={styles.tabPulseBadge}>{Math.round(progress)}%</span>
+            )}
           </button>
           <button
             type="button"
@@ -354,6 +387,24 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
             <span>Audio Book & Cultural Story</span>
           </button>
         </div>
+
+        {/* In-Modal Background Generation Banner (when user is browsing Audio Tab) */}
+        {isGenerating && activeTab !== 'itinerary' && (
+          <div
+            className={styles.tabBanner}
+            onClick={() => setActiveTab('itinerary')}
+            title="Click to view full generation progress"
+          >
+            <div className={styles.tabBannerLeft}>
+              <Loader2 size={13} className="animate-spin" />
+              <span>
+                Compiling itinerary & PDF for <strong>{city}</strong> ({days} Days)...{' '}
+                <strong>{Math.round(progress)}%</strong>
+              </span>
+            </div>
+            <span className={styles.tabBannerAction}>View Progress &rarr;</span>
+          </div>
+        )}
 
         {/* Window Body */}
         <div className={styles.modalBody}>
