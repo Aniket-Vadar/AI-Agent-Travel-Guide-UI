@@ -731,7 +731,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                 {/* Hidden Audio Player Element */}
                 <audio
                   ref={audioRef}
-                  src={api.getAudioUrl(city, country)}
+                  src={`${api.getAudioUrl(city, country, undefined, audioKey > 0)}&t=${audioKey}`}
                   preload="auto"
                   onCanPlay={handleAudioCanPlay}
                   onCanPlayThrough={handleAudioCanPlay}
@@ -797,7 +797,7 @@ export const TripPlannerModal: React.FC<TripPlannerModalProps> = ({
                     </div>
 
                     <a
-                      href={api.getAudioUrl(city, country)}
+                      href={`${api.getAudioUrl(city, country, undefined, audioKey > 0)}&t=${audioKey}`}
                       download={`${city}_Audio_Guide.mp3`}
                       className={styles.downloadAudioBtn}
                     >

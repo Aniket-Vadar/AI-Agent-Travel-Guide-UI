@@ -372,8 +372,11 @@ export const api = {
     };
   },
 
-  getAudioUrl(city: string, country = '', token?: string): string {
+  getAudioUrl(city: string, country = '', token?: string, refresh = false): string {
     const params = new URLSearchParams({ country });
+    if (refresh) {
+      params.set('refresh', 'true');
+    }
     if (token) {
       params.set('token', token);
     } else {

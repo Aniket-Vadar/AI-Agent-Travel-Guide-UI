@@ -37,7 +37,7 @@ export const StoryView: React.FC<StoryViewProps> = ({
   const [autoPlayRequested, setAutoPlayRequested] = useState(false);
   const [audioUrlKey, setAudioUrlKey] = useState(0);
 
-  const audioUrl = `${api.getAudioUrl(story.city, story.country)}&t=${audioUrlKey}`;
+  const audioUrl = `${api.getAudioUrl(story.city, story.country, undefined, audioUrlKey > 0)}&t=${audioUrlKey}`;
 
   // Reset and start generation animation when story changes
   useEffect(() => {
